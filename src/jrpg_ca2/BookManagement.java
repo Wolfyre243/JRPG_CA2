@@ -42,7 +42,7 @@ public class BookManagement {
 
             // Read Book Data
             for (int i = 0; i < intRecords; i++) {
-                /* Read Student Data */
+                /* Read Book Data */
                 line = reader.readLine();
 
                 // Read Book data
