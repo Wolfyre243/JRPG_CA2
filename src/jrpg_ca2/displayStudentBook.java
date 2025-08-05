@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.BorderFactory;
-
+import javax.swing.JOptionPane;
 /**
  *
  * @author jayde
@@ -19,7 +19,7 @@ public class displayStudentBook extends javax.swing.JFrame {
     private final StudentManagement studentManagement = new StudentManagement();
     private final BookManagement bookManagement = new BookManagement();
 
-    private static SoundPlayer errorAudio = new SoundPlayer("error.wav");
+    private static SoundPlayer errorAudio = new SoundPlayer("jrpg_ca2/error.wav");
     
     public int index;
     public int bookIndex;
@@ -90,6 +90,8 @@ public class displayStudentBook extends javax.swing.JFrame {
             bookNumber.setBorder(BorderFactory.createTitledBorder("No Books Found"));
         }
     }
+   
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -110,7 +112,7 @@ public class displayStudentBook extends javax.swing.JFrame {
         nextBtnStudent = new javax.swing.JButton();
         firstBtnStudent = new javax.swing.JButton();
         lastBtnStudent = new javax.swing.JButton();
-        createBtn = new javax.swing.JButton();
+        createBtnStudent = new javax.swing.JButton();
         deleteBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -186,6 +188,11 @@ public class displayStudentBook extends javax.swing.JFrame {
         });
 
         firstBtnStudent.setText("First");
+        firstBtnStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                firstBtnStudentActionPerformed(evt);
+            }
+        });
 
         lastBtnStudent.setText("Last");
         lastBtnStudent.addActionListener(new java.awt.event.ActionListener() {
@@ -194,10 +201,10 @@ public class displayStudentBook extends javax.swing.JFrame {
             }
         });
 
-        createBtn.setText("Create");
-        createBtn.addActionListener(new java.awt.event.ActionListener() {
+        createBtnStudent.setText("Create");
+        createBtnStudent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createBtnActionPerformed(evt);
+                createBtnStudentActionPerformed(evt);
             }
         });
 
@@ -220,7 +227,7 @@ public class displayStudentBook extends javax.swing.JFrame {
                             .addComponent(nameField))
                         .addGap(18, 18, 18)
                         .addGroup(studentNumberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(createBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(createBtnStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(studentNumberLayout.createSequentialGroup()
                         .addComponent(previousBtnStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -240,7 +247,7 @@ public class displayStudentBook extends javax.swing.JFrame {
                 .addGroup(studentNumberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameLabel)
                     .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(createBtn))
+                    .addComponent(createBtnStudent))
                 .addGap(22, 22, 22)
                 .addGroup(studentNumberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(studentIDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -594,11 +601,112 @@ public class displayStudentBook extends javax.swing.JFrame {
 
     private void previousBtnStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousBtnStudentActionPerformed
         // TODO add your handling code here:
+        if (index != 0) {
+            index--;
+
+        }
+        displayCurrentStudent();
     }//GEN-LAST:event_previousBtnStudentActionPerformed
 
-    private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_createBtnActionPerformed
+    private void createBtnStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnStudentActionPerformed
+
+    String dialogTitle = "Create New Student";
+
+    String studAdminNumber = studentIDField.getText().trim();
+    String studName = nameField.getText().trim();
+
+    // Check if empty
+    if (studAdminNumber.isEmpty() || studName.isEmpty()) {
+        errorAudio.playSound();
+        JOptionPane.showMessageDialog(
+                this,
+                "Please fill in both Admin Number and Name.",
+                "Input Error",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Validation: Admin must start with 'p'
+    if (!studAdminNumber.startsWith("p")) {
+        errorAudio.playSound();
+        JOptionPane.showMessageDialog(
+                this,
+                "Admin Number must begin with 'p'.",
+                "Input Error", 
+                JOptionPane.ERROR_MESSAGE
+        );
+        return;
+    }
+
+    // Validation: Length = 8
+    if (studAdminNumber.length() != 8) {
+        errorAudio.playSound();
+        JOptionPane.showMessageDialog(
+                this,
+                "Admin Number must be exactly 8 characters (e.g., p2501234).",
+                "Input Error", 
+                JOptionPane.ERROR_MESSAGE
+        );
+        return;
+    }
+
+    // Validation: numeric part between 1300000 and 2600000
+    try {
+        int adminNo = Integer.parseInt(studAdminNumber.substring(1));
+        if (adminNo < 1300000 || adminNo > 2600000) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Admin number must be between p1300000 and p2600000.",
+                    "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    } catch (NumberFormatException e) {
+        errorAudio.playSound();
+        JOptionPane.showMessageDialog(this,
+                "Admin number format is invalid. Use e.g., p2501234.",
+                "Input Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    boolean duplicateFound = false;
+    for (int i = 0; i < allStudents.size(); i++) { 
+        if(allStudents.get(i).getAdminNumber().equalsIgnoreCase(studAdminNumber)) {
+            duplicateFound = true;
+            break;
+        }
+    }
+    
+    if (duplicateFound) {
+        errorAudio.playSound();
+        JOptionPane.showMessageDialog(
+                this,
+                "This Admin Number is already in use",
+                "Input Error",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Validation: name only letters + space
+    if (!studName.matches("^[a-zA-Z\\s]+$")) {
+        errorAudio.playSound();
+        JOptionPane.showMessageDialog(this,
+                "Name can only contain letters and spaces.",
+                "Input Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Create & add student
+    Student newStudent = new Student(studAdminNumber, studName);
+    allStudents.add(newStudent);
+
+    JOptionPane.showMessageDialog(this,
+            "Student added successfully!",
+            dialogTitle, JOptionPane.INFORMATION_MESSAGE);
+
+    // Optional: Clear fields after success
+    displayCurrentStudent();
+    }//GEN-LAST:event_createBtnStudentActionPerformed
 
     private void studentRBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentRBActionPerformed
         // TODO add your handling code here:
@@ -618,6 +726,93 @@ public class displayStudentBook extends javax.swing.JFrame {
 
     private void addBookBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBookBtnActionPerformed
         // TODO add your handling code here:
+        
+        String title = titleField.getText().trim();
+        String author = authorField.getText().trim();
+        String ISBN = ISBNField.getText().trim();
+        String priceText = priceField.getText().trim();
+        String category = categoryField.getText().trim();
+        String availabilityText = avaliabilityField.getText().trim().toLowerCase();
+        final String dialogTitle = "Add Book";
+
+        // Validate Title
+        if (!title.matches("^[a-zA-Z0-9'\\s]+$")) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Title can only contain letters, numbers, and spaces.", 
+                    "Input Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate Author
+        if (!author.matches("^[a-zA-Z\\s]+$")) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Author name can only contain letters and spaces.", 
+                    "Input Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate ISBN
+        if (!ISBN.matches("^[0-9]+$")) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "ISBN can only contain numbers.", 
+                    "Input Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }   
+
+        // Check for duplicate ISBN
+        for (int i = 0; i < allBooks.size(); i++) {
+            if (allBooks.get(i).getISBN().equalsIgnoreCase(ISBN)) {
+                errorAudio.playSound();
+                JOptionPane.showMessageDialog(
+                        this, 
+                        "This ISBN is already in use.", 
+                        "Input Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // Validate Price
+        double price;
+        try {
+            price = Double.parseDouble(priceText);
+            if (price < 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(this, "Price must be a positive number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate Category
+        if (!category.matches("^[a-zA-Z\\s]+$")) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(this, "Category can only contain letters and spaces.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate Availability (must be exactly 'true')
+        if (!availabilityText.equals("yes")) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(this, "Availability must be 'Yes'.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Add Book
+        Book newBook = new Book(title, author, ISBN, price, category, true); // availability always true
+        allBooks.add(newBook);
+
+        JOptionPane.showMessageDialog(this, "Book added successfully!", dialogTitle, JOptionPane.INFORMATION_MESSAGE);
+
+        displayCurrentBook();
     }//GEN-LAST:event_addBookBtnActionPerformed
 
     private void firstBtnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstBtnBookActionPerformed
@@ -629,6 +824,10 @@ public class displayStudentBook extends javax.swing.JFrame {
 
     private void nextBtnStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBtnStudentActionPerformed
         // TODO add your handling code here:
+        if (index < allStudents.size() - 1) {
+            index++;
+        }
+        displayCurrentStudent();
     }//GEN-LAST:event_nextBtnStudentActionPerformed
 
     private void displayBookBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayBookBtnActionPerformed
@@ -649,6 +848,9 @@ public class displayStudentBook extends javax.swing.JFrame {
 
     private void lastBtnStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastBtnStudentActionPerformed
         // TODO add your handling code here: 
+        index = allStudents.size() - 1;
+
+        displayCurrentStudent();
     }//GEN-LAST:event_lastBtnStudentActionPerformed
 
     private void lastBtnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastBtnBookActionPerformed
@@ -665,6 +867,13 @@ public class displayStudentBook extends javax.swing.JFrame {
         }
         displayCurrentBook();
     }//GEN-LAST:event_nextBtnBookActionPerformed
+
+    private void firstBtnStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstBtnStudentActionPerformed
+        // TODO add your handling code here:
+        index = 0;
+
+        displayCurrentStudent();
+    }//GEN-LAST:event_firstBtnStudentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -714,7 +923,7 @@ public class displayStudentBook extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField categoryField;
     private javax.swing.JLabel categoryLabel;
-    private javax.swing.JButton createBtn;
+    private javax.swing.JButton createBtnStudent;
     private javax.swing.JButton deleteBookBtn;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JButton displayBookBtn;

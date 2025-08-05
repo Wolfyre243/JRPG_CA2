@@ -51,7 +51,7 @@ public class BookManagement {
                 line = line.trim().replaceAll(";$", "");
                 String[] BookParts = line.split(";");
 
-                final Book newBook = new Book(BookParts[0], BookParts[1], BookParts[2], Double.parseDouble(BookParts[3]), BookParts[3], Boolean.parseBoolean(BookParts[5]));
+                final Book newBook = new Book(BookParts[0], BookParts[1], BookParts[2], Double.parseDouble(BookParts[3]), BookParts[4], Boolean.parseBoolean(BookParts[5]));
                 System.out.println("Book Title: " + BookParts[0]);
                 System.out.println("Author: " + BookParts[1]);
                 System.out.println("ISBN: " + BookParts[2]);
