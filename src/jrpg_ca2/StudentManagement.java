@@ -53,9 +53,9 @@ public class StudentManagement {
                 line = line.trim().replaceAll(";$", "");
                 String[] studentParts = line.split(";");
 
-                final Student newStudent = new Student(studentParts[0], studentParts[1]);
-                System.out.println("Student ID " + studentParts[0]);
-                System.out.println("Student Name " + studentParts[1]);
+                final Student newStudent = new Student(studentParts[1], studentParts[0]);
+                System.out.println("Student ID " + studentParts[1]);
+                System.out.println("Student Name " + studentParts[0]);
                 this.studentStore.add(newStudent);
 
                 // Reading Borrowed Books data
