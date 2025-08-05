@@ -141,7 +141,7 @@
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="createBtn" min="-2" pref="75" max="-2" attributes="0"/>
+                              <Component id="createBtnStudent" min="-2" pref="75" max="-2" attributes="0"/>
                               <Component id="deleteBtn" min="-2" pref="75" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -167,7 +167,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="nameField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="createBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="createBtnStudent" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -234,6 +234,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="First"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="firstBtnStudentActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="lastBtnStudent">
           <Properties>
@@ -243,18 +246,21 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="lastBtnStudentActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="createBtn">
+        <Component class="javax.swing.JButton" name="createBtnStudent">
           <Properties>
             <Property name="text" type="java.lang.String" value="Create"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createBtnActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createBtnStudentActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="deleteBtn">
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteBtnActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -591,6 +597,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Delete Book"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteBookBtnActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="previousBtnBook">
               <Properties>
