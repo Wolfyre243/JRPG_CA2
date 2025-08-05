@@ -5,6 +5,9 @@ package jrpg_ca2;
  * @author Jayden
  */
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,12 +17,61 @@ import javax.swing.JTable;
 
 public class BookManagement {
     final private ArrayList<Book> bookStore;
+    private String filePath = "src/jrpg_ca2/books.txt";
 
     final private static SoundPlayer errorAudio = new SoundPlayer("error.wav");
 
      public BookManagement() {
         this.bookStore = new ArrayList<Book>();
     }
+     
+     public void loadAllData() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
+//            System.out.println("Books List:");
+//            System.out.println("-----------------");
+            String line;
+
+            // Read the first line to get number of records for students
+            String records = reader.readLine();
+            records = records.trim().replaceAll(";$", "");
+            int intRecords = Integer.parseInt(records);
+//            Student[] addStudents = new Student[intRecords];
+
+            System.out.println(records);
+
+            // Read Book Data
+            for (int i = 0; i < intRecords; i++) {
+                /* Read Student Data */
+                line = reader.readLine();
+
+                // Read Book data
+                //if (line.trim().isEmpty()) continue;
+                // Remove trailing semicolon and split by semicolon
+                line = line.trim().replaceAll(";$", "");
+                String[] BookParts = line.split(";");
+
+                final Book newBook = new Book(BookParts[0], BookParts[1], BookParts[2], Double.parseDouble(BookParts[3]), BookParts[3], Boolean.parseBoolean(BookParts[5]));
+                System.out.println("Book Title: " + BookParts[0]);
+                System.out.println("Author: " + BookParts[1]);
+                System.out.println("ISBN: " + BookParts[2]);
+                System.out.println("Price: " + BookParts[3]);
+                System.out.println("Category: " + BookParts[4]);
+                System.out.println("Avaliable: " + BookParts[5]);
+                this.bookStore.add(newBook);
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error: The file 'books.txt' was not found or could not be read. " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        }
+    }
+     
+    public ArrayList<Book> getBookStore() {
+        return this.bookStore;
+    }
+
 
     // displayBooks
     public void displayBooks() {
