@@ -27,6 +27,8 @@ public class LibraryInterface extends javax.swing.JFrame {
     private ArrayList<Student> allStudents;
     private ArrayList<Book> allStudentBooks;
 
+    private Student currentStudent;
+
     /**
      * Creates new form LibraryInterface
      */
@@ -45,7 +47,7 @@ public class LibraryInterface extends javax.swing.JFrame {
     }
 
     public void displayStudents() {
-        Student currentStudent = allStudents.get(index);
+        currentStudent = allStudents.get(index);
         System.out.println(currentStudent);
         studentNameField.setText(currentStudent.getName());
         studentIDField.setText(currentStudent.getAdminNumber());
@@ -53,16 +55,28 @@ public class LibraryInterface extends javax.swing.JFrame {
         studentSearchSection.setBorder(BorderFactory.createTitledBorder(
                 "Student " + (index + 1) + " of " + allStudents.size()));
 
-        allStudentBooks = currentStudent.getBorrowedBooks();
-        System.out.println(allStudentBooks);
-        Book currentBook = allStudentBooks.get(bookIndex);
-        bookTitleField.setText(currentBook.getBookTitle());
-        bookAuthorField.setText(currentBook.getAuthor());
-        bookISBNField.setText(currentBook.getISBN());
-        bookAvailabilityField.setText(currentBook.getAvailableForLoan() ? "Yes" : "No");
+        displayStudentBooks();
+    }
 
-        bookSearchSection.setBorder(BorderFactory.createTitledBorder(
-                "Book " + (index + 1) + " of " + allStudentBooks.size()));
+    public void displayStudentBooks() {
+        try {
+            allStudentBooks = currentStudent.getBorrowedBooks();
+            Book currentBook = allStudentBooks.get(bookIndex);
+            bookTitleField.setText(currentBook.getBookTitle());
+            bookAuthorField.setText(currentBook.getAuthor());
+            bookISBNField.setText(currentBook.getISBN());
+            bookAvailabilityField.setText(currentBook.getAvailableForLoan() ? "Yes" : "No");
+
+            bookSearchSection.setBorder(BorderFactory.createTitledBorder(
+                    "Book " + (bookIndex + 1) + " of " + allStudentBooks.size()));
+        } catch (IndexOutOfBoundsException e) {
+//            Book currentBook = null;
+            bookTitleField.setText(null);
+            bookAuthorField.setText(null);
+            bookISBNField.setText(null);
+            bookAvailabilityField.setText(null);
+            bookSearchSection.setBorder(BorderFactory.createTitledBorder("No Books Found"));
+        }
     }
 
     /**
@@ -116,10 +130,10 @@ public class LibraryInterface extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         bookAvailabilityField = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        bookPreviousButton = new javax.swing.JButton();
+        bookNextButton = new javax.swing.JButton();
+        bookFirstButton = new javax.swing.JButton();
+        bookLastButton = new javax.swing.JButton();
         studentReturnButton = new javax.swing.JButton();
         ExitButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -214,12 +228,32 @@ public class LibraryInterface extends javax.swing.JFrame {
         );
 
         studentPreviousButton.setLabel("< Previous");
+        studentPreviousButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentPreviousButtonActionPerformed(evt);
+            }
+        });
 
         studentNextButton.setLabel("Next >");
+        studentNextButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentNextButtonActionPerformed(evt);
+            }
+        });
 
         studentFirstButton.setText("First");
+        studentFirstButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentFirstButtonActionPerformed(evt);
+            }
+        });
 
         studentLastButton.setText("Last");
+        studentLastButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentLastButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout studentSectionButtonsLayout = new javax.swing.GroupLayout(studentSectionButtons);
         studentSectionButtons.setLayout(studentSectionButtonsLayout);
@@ -482,13 +516,33 @@ public class LibraryInterface extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton1.setText("< Previous");
+        bookPreviousButton.setText("< Previous");
+        bookPreviousButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bookPreviousButtonActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Next >");
+        bookNextButton.setText("Next >");
+        bookNextButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bookNextButtonActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("First");
+        bookFirstButton.setText("First");
+        bookFirstButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bookFirstButtonActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("Last");
+        bookLastButton.setText("Last");
+        bookLastButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bookLastButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -496,13 +550,13 @@ public class LibraryInterface extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(bookPreviousButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
+                .addComponent(bookNextButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bookFirstButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
+                .addComponent(bookLastButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -510,10 +564,10 @@ public class LibraryInterface extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(bookPreviousButton)
+                    .addComponent(bookNextButton)
+                    .addComponent(bookFirstButton)
+                    .addComponent(bookLastButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -637,6 +691,67 @@ public class LibraryInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void studentPreviousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentPreviousButtonActionPerformed
+        // TODO add your handling code here:
+        if (index != 0) {
+            index--;
+
+        }
+        displayStudents();
+    }//GEN-LAST:event_studentPreviousButtonActionPerformed
+
+    private void studentNextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentNextButtonActionPerformed
+        // TODO add your handling code here:
+        if (index < allStudents.size() - 1) {
+            index++;
+        }
+        displayStudents();
+    }//GEN-LAST:event_studentNextButtonActionPerformed
+
+    private void studentFirstButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentFirstButtonActionPerformed
+        // TODO add your handling code here:
+        index = 0;
+
+        displayStudents();
+    }//GEN-LAST:event_studentFirstButtonActionPerformed
+
+    private void studentLastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentLastButtonActionPerformed
+        // TODO add your handling code here:
+        index = allStudents.size() - 1;
+
+        displayStudents();
+    }//GEN-LAST:event_studentLastButtonActionPerformed
+
+    private void bookPreviousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookPreviousButtonActionPerformed
+        // TODO add your handling code here:
+        if (bookIndex != 0) {
+            bookIndex--;
+        }
+        displayStudents();
+    }//GEN-LAST:event_bookPreviousButtonActionPerformed
+
+    private void bookLastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookLastButtonActionPerformed
+        // TODO add your handling code here:
+        bookIndex = allStudentBooks.size() - 1;
+
+        displayStudents();
+    }//GEN-LAST:event_bookLastButtonActionPerformed
+
+    private void bookNextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookNextButtonActionPerformed
+        // TODO add your handling code here:
+        if (bookIndex < allStudentBooks.size() - 1) {
+            bookIndex++;
+        }
+        displayStudents();
+    }//GEN-LAST:event_bookNextButtonActionPerformed
+
+    private void bookFirstButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookFirstButtonActionPerformed
+        // TODO add your handling code here:
+        bookIndex = 0;
+
+        displayStudents();
+    }//GEN-LAST:event_bookFirstButtonActionPerformed
+
     private void toggleByStudentActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_toggleByStudentActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_toggleByStudentActionPerformed
@@ -718,15 +833,15 @@ public class LibraryInterface extends javax.swing.JFrame {
     private javax.swing.JLabel Title;
     private javax.swing.JTextField bookAuthorField;
     private javax.swing.JTextField bookAvailabilityField;
+    private javax.swing.JButton bookFirstButton;
     private javax.swing.JTextField bookISBNField;
+    private javax.swing.JButton bookLastButton;
+    private javax.swing.JButton bookNextButton;
+    private javax.swing.JButton bookPreviousButton;
     private javax.swing.JPanel bookSearchSection;
     private javax.swing.JTextField bookTitleField;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
