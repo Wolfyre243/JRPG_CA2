@@ -209,6 +209,11 @@ public class displayStudentBook extends javax.swing.JFrame {
         });
 
         deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout studentNumberLayout = new javax.swing.GroupLayout(studentNumber);
         studentNumber.setLayout(studentNumberLayout);
@@ -365,6 +370,11 @@ public class displayStudentBook extends javax.swing.JFrame {
         });
 
         deleteBookBtn.setText("Delete Book");
+        deleteBookBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBookBtnActionPerformed(evt);
+            }
+        });
 
         previousBtnBook.setText("Previous");
         previousBtnBook.addActionListener(new java.awt.event.ActionListener() {
@@ -874,6 +884,116 @@ public class displayStudentBook extends javax.swing.JFrame {
 
         displayCurrentStudent();
     }//GEN-LAST:event_firstBtnStudentActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void deleteBookBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBookBtnActionPerformed
+        // TODO add your handling code here:
+    //      String isbnToDelete = ISBNField.getText().trim();
+
+    // if (isbnToDelete.isEmpty()) {
+    //     errorAudio.playSound();
+    //     JOptionPane.showMessageDialog(
+    //             this,
+    //             "Please enter the ISBN of the book to delete.",
+    //             "Input Error",
+    //             JOptionPane.ERROR_MESSAGE
+    //     );
+    //     return;
+    // }
+    
+    
+    // // Step 1: Locate the book and store index
+    // Book bookToDelete = null;
+    // int bookIndexToRemove = -1;
+    // for (int i = 0; i < allBooks.size(); i++) {
+    //     Book b = allBooks.get(i);
+    //     if (b.getISBN().equalsIgnoreCase(isbnToDelete)) {
+    //         bookToDelete = b;
+    //         bookIndexToRemove = i;
+    //         break;
+    //     }
+    // }
+
+    // // Step 2: Book not found
+    // if (bookToDelete == null) {
+    //     errorAudio.playSound();
+    //     JOptionPane.showMessageDialog(
+    //             this,
+    //             "Book with ISBN \"" + isbnToDelete + "\" not found.",
+    //             "Error",
+    //             JOptionPane.ERROR_MESSAGE
+    //     );
+    //     return;
+    // }
+
+    // // Step 3: Show book info and confirm
+    // String bookInfo = String.format(
+    //         "Are you sure you want to delete this book?\n\n"
+    //         + "Title: %s\n"
+    //         + "Author: %s\n"
+    //         + "ISBN: %s\n"
+    //         + "Price: $%.2f\n"
+    //         + "Category: %s\n"
+    //         + "Available: %s",
+    //         bookToDelete.getBookTitle(),
+    //         bookToDelete.getAuthor(),
+    //         bookToDelete.getISBN(),
+    //         bookToDelete.getPrice(),
+    //         bookToDelete.getCategory(),
+    //         bookToDelete.getAvailableForLoan() ? "Yes" : "No"
+    // );
+
+    // int confirm = JOptionPane.showConfirmDialog(
+    //         this,
+    //         bookInfo,
+    //         "Confirm Book Deletion",
+    //         JOptionPane.YES_NO_OPTION
+    // );
+
+    // if (confirm != JOptionPane.YES_OPTION) {
+    //     return;
+    // }
+
+    //  // Step 4: Update all students' borrowed list
+    // for (int i = 0; i < allStudents.size(); i++) {
+    //     Student student = allStudents.get(i);
+    //     ArrayList<Book> borrowed = student.getBorrowedBooks();
+
+    //     for (int j = 0; j < borrowed.size(); j++) {
+    //         Book borrowedBook = borrowed.get(j);
+    //         if (borrowedBook.getISBN().equalsIgnoreCase(isbnToDelete)) {
+    //             borrowed.remove(j);
+    //             j--; // Decrement j since list size has changed
+    //         }
+    //     }
+    // }
+    // // Step 5: Remove the book from the main book list
+    // allBooks.remove(bookIndexToRemove);
+
+    // JOptionPane.showMessageDialog(
+    //         this,
+    //         "Book deleted successfully.",
+    //         "Success",
+    //         JOptionPane.INFORMATION_MESSAGE
+    // );
+
+    // // Step 6: Adjust index if needed
+    // if (bookIndex >= allBooks.size()) {
+    //     bookIndex = allBooks.size() - 1;
+    // }
+
+    // displayCurrentBook();
+
+    String isbnToDelete = ISBNField.getText().trim();
+
+    bookManagement.deleteBook(isbnToDelete);
+
+    displayCurrentBook();
+
+    }//GEN-LAST:event_deleteBookBtnActionPerformed
 
     /**
      * @param args the command line arguments

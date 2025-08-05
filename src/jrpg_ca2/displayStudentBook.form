@@ -258,6 +258,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteBtnActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -594,6 +597,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Delete Book"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteBookBtnActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="previousBtnBook">
               <Properties>
