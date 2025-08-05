@@ -93,7 +93,7 @@ public class BookManagement {
     }
 
     // searchBookByTitle
-    public void searchForBook(String searchTerm) {
+    public Book searchForBook(String searchTerm) {
         for (int i = 0; i < this.bookStore.size(); i++) {
             if (this.bookStore.get(i).getBookTitle().equalsIgnoreCase(searchTerm)) {
                 final String foundMsg = 
@@ -102,20 +102,20 @@ public class BookManagement {
                     "Book Author: " + this.bookStore.get(i).getAuthor() + "\n" +
                     "Avaliability: " + this.bookStore.get(i).getAvailableForLoan();
 
-                JOptionPane.showMessageDialog(null, foundMsg, "Search Result", JOptionPane.INFORMATION_MESSAGE);
-                return;
+//                JOptionPane.showMessageDialog(null, foundMsg, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                return this.bookStore.get(i);
             }
         }
 
         // If not found
         errorAudio.playSound();
 
-        JOptionPane.showMessageDialog(null, 
-            "Cannot find the book \"" + searchTerm + "\"",
-            "Book Not Found", 
-            JOptionPane.ERROR_MESSAGE
-        );
-        return;
+//        JOptionPane.showMessageDialog(null, 
+//            "Cannot find the book \"" + searchTerm + "\"",
+//            "Book Not Found", 
+//            JOptionPane.ERROR_MESSAGE
+//        );
+        return null;
     }
 
     // addBook

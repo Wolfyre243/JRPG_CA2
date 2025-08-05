@@ -5,10 +5,11 @@ package jrpg_ca2;
  *
  * @author Junkai
  */
-
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,6 +23,8 @@ public class StudentManagement {
     private String filePath = "src/jrpg_ca2/students.txt";
 
     private static SoundPlayer errorAudio = new SoundPlayer("error.wav");
+
+    private PrintWriter printWriter;
 
     public StudentManagement() {
         this.studentStore = new ArrayList<Student>();
@@ -67,7 +70,7 @@ public class StudentManagement {
                     line = reader.readLine();
                     line = line.trim().replaceAll(";$", "");
                     String[] bookParts = line.split(";");
-                    
+
                     System.out.println("Book Title: " + bookParts[0]);
                     newStudent.addBorrowedBook(new Book(bookParts[0], bookParts[1], bookParts[2], Double.parseDouble(bookParts[3]), bookParts[4], false));
                 }
@@ -77,6 +80,44 @@ public class StudentManagement {
             System.err.println("Error: The file 'students.txt' was not found or could not be read. " + e.getMessage());
         } catch (Exception e) {
             System.err.println("An error occurred: " + e.getMessage());
+        }
+    }
+
+    public void saveAllData() {
+        try {
+            printWriter = new PrintWriter(new FileWriter("src/jrpg_ca2/students.txt"));
+
+            // Save student list length
+            printWriter.println(studentStore.size() + ";");
+
+            for (int i = 0; i < studentStore.size(); i++) {
+                final Student currentStudent = studentStore.get(i);
+
+                printWriter.println(
+                        currentStudent.getName() + ";"
+                        + currentStudent.getAdminNumber() + ";"
+                );
+                
+                final ArrayList<Book> studentBooks = currentStudent.getBorrowedBooks();
+                printWriter.println(studentBooks.size() + ";");
+                
+                for (int j = 0; j < studentBooks.size(); j++) {
+                    final Book currentBook = studentBooks.get(j);
+                    printWriter.println(
+                            currentBook.getBookTitle() + ";"
+                            + currentBook.getAuthor() + ";"
+                            + currentBook.getISBN() + ";"
+                            + currentBook.getPrice() + ";"
+                            + currentBook.getCategory() + ";"
+                    );
+                }
+            }
+            
+            printWriter.close();
+
+        } catch (Exception e) {
+            System.err.println("Error saving data to file: ");
+            e.printStackTrace();
         }
     }
 
@@ -102,23 +143,23 @@ public class StudentManagement {
         JOptionPane.showMessageDialog(null, new JScrollPane(table), "All Students", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void searchForStudent(String searchTerm) {
+    public Student searchForStudent(String searchTerm) {
         for (int i = 0; i < this.studentStore.size(); i++) {
             if (this.studentStore.get(i).getName().equalsIgnoreCase(searchTerm)) {
                 final String foundMsg = "Admin #: " + this.studentStore.get(i).getAdminNumber() + "\n"
                         + "Name: " + this.studentStore.get(i).getName();
-                JOptionPane.showMessageDialog(null, foundMsg, "Search Result", JOptionPane.INFORMATION_MESSAGE);
-                return;
+//                JOptionPane.showMessageDialog(null, foundMsg, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                return this.studentStore.get(i);
             }
         }
 
         // If not found
         errorAudio.playSound();
-        JOptionPane.showMessageDialog(null,
-                "Cannot find the student \"" + searchTerm + "\"!",
-                "Student Not Found",
-                JOptionPane.ERROR_MESSAGE);
-        return;
+//        JOptionPane.showMessageDialog(null,
+//                "Cannot find the student \"" + searchTerm + "\"!",
+//                "Student Not Found",
+//                JOptionPane.ERROR_MESSAGE);
+        return null;
     }
 
     public void advancedSearchForStudent(String partialName) {
