@@ -60,7 +60,6 @@ public class LibraryInterface extends javax.swing.JFrame {
 
     public void displayStudents() {
         currentStudent = allStudents.get(index);
-        System.out.println(currentStudent);
         studentNameField.setText(currentStudent.getName());
         studentIDField.setText(currentStudent.getAdminNumber());
 
