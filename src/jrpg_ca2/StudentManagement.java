@@ -56,7 +56,7 @@ public class StudentManagement {
                 final Student newStudent = new Student(studentParts[0], studentParts[1]);
                 System.out.println("Student ID " + studentParts[0]);
                 System.out.println("Student Name " + studentParts[1]);
-                this.studentStore.add(new Student(studentParts[0], studentParts[1]));
+                this.studentStore.add(newStudent);
 
                 // Reading Borrowed Books data
                 line = reader.readLine();
@@ -71,7 +71,6 @@ public class StudentManagement {
                     System.out.println("Book Title: " + bookParts[0]);
                     newStudent.addBorrowedBook(new Book(bookParts[0], bookParts[1], bookParts[2], Double.parseDouble(bookParts[3]), bookParts[4], false));
                 }
-
             }
 
         } catch (IOException e) {

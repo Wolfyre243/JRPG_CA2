@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.BorderFactory;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -19,10 +20,12 @@ public class LibraryInterface extends javax.swing.JFrame {
     private final BookManagement bookManagement = new BookManagement();
 
     private static SoundPlayer errorAudio = new SoundPlayer("error.wav");
-    
-    public int index = 0;
-    
+
+    public int index;
+    public int bookIndex;
+
     private ArrayList<Student> allStudents;
+    private ArrayList<Book> allStudentBooks;
 
     /**
      * Creates new form LibraryInterface
@@ -30,12 +33,36 @@ public class LibraryInterface extends javax.swing.JFrame {
     public LibraryInterface() {
         initComponents();
         loadStudents();
+        index = 0;
+        bookIndex = 0;
+        displayStudents();
     }
-    
+
     public void loadStudents() {
         studentManagement.loadAllData();
         allStudents = studentManagement.getStudentStore();
         System.out.println(allStudents);
+    }
+
+    public void displayStudents() {
+        Student currentStudent = allStudents.get(index);
+        System.out.println(currentStudent);
+        studentNameField.setText(currentStudent.getName());
+        studentIDField.setText(currentStudent.getAdminNumber());
+
+        studentSearchSection.setBorder(BorderFactory.createTitledBorder(
+                "Student " + (index + 1) + " of " + allStudents.size()));
+
+        allStudentBooks = currentStudent.getBorrowedBooks();
+        System.out.println(allStudentBooks);
+        Book currentBook = allStudentBooks.get(bookIndex);
+        bookTitleField.setText(currentBook.getBookTitle());
+        bookAuthorField.setText(currentBook.getAuthor());
+        bookISBNField.setText(currentBook.getISBN());
+        bookAvailabilityField.setText(currentBook.getAvailableForLoan() ? "Yes" : "No");
+
+        bookSearchSection.setBorder(BorderFactory.createTitledBorder(
+                "Book " + (index + 1) + " of " + allStudentBooks.size()));
     }
 
     /**
@@ -51,7 +78,6 @@ public class LibraryInterface extends javax.swing.JFrame {
         searchTypeToggle = new javax.swing.ButtonGroup();
         Title = new javax.swing.JLabel();
         studentSearchSection = new javax.swing.JPanel();
-        studentSectionLabel = new javax.swing.JLabel();
         studentSectionDisplay = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -76,7 +102,6 @@ public class LibraryInterface extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         bookSearchSection = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -97,21 +122,20 @@ public class LibraryInterface extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         studentReturnButton = new javax.swing.JButton();
         ExitButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1200, 800));
-        setMinimumSize(new java.awt.Dimension(800, 600));
-        setPreferredSize(new java.awt.Dimension(800, 600));
-        setResizable(false);
-        setSize(new java.awt.Dimension(0, 0));
+        setMaximumSize(new java.awt.Dimension(1000, 700));
+        setMinimumSize(new java.awt.Dimension(1000, 700));
+        setPreferredSize(new java.awt.Dimension(1000, 700));
+        setSize(new java.awt.Dimension(1000, 700));
 
         Title.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         Title.setText("Student Library System");
 
+        studentSearchSection.setBorder(javax.swing.BorderFactory.createTitledBorder("Student of "));
         studentSearchSection.setToolTipText("");
         studentSearchSection.setName(""); // NOI18N
-
-        studentSectionLabel.setText("Student x of x");
 
         jLabel3.setText("Name: ");
 
@@ -234,7 +258,6 @@ public class LibraryInterface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(studentSearchSectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(studentSectionButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(studentSectionLabel, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(studentSectionDisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -242,8 +265,6 @@ public class LibraryInterface extends javax.swing.JFrame {
             studentSearchSectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(studentSearchSectionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(studentSectionLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(studentSectionDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(studentSectionButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -349,7 +370,7 @@ public class LibraryInterface extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jLabel7.setText("Book x of x");
+        bookSearchSection.setBorder(javax.swing.BorderFactory.createTitledBorder("Book of "));
 
         jLabel8.setText("Title: ");
 
@@ -517,7 +538,7 @@ public class LibraryInterface extends javax.swing.JFrame {
                             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 412, Short.MAX_VALUE)
                         .addComponent(studentReturnButton)))
                 .addGap(16, 16, 16))
         );
@@ -536,7 +557,7 @@ public class LibraryInterface extends javax.swing.JFrame {
                     .addComponent(studentReturnButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(218, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout bookSearchSectionLayout = new javax.swing.GroupLayout(bookSearchSection);
@@ -545,19 +566,13 @@ public class LibraryInterface extends javax.swing.JFrame {
             bookSearchSectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bookSearchSectionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(bookSearchSectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(bookSearchSectionLayout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         bookSearchSectionLayout.setVerticalGroup(
             bookSearchSectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bookSearchSectionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -571,6 +586,9 @@ public class LibraryInterface extends javax.swing.JFrame {
                 ExitButtonActionPerformed(evt);
             }
         });
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setText("Books Borrowed");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -588,8 +606,10 @@ public class LibraryInterface extends javax.swing.JFrame {
                     .addComponent(searchResultSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(ExitButton)))
-                .addContainerGap())
+                        .addComponent(ExitButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -604,11 +624,13 @@ public class LibraryInterface extends javax.swing.JFrame {
                     .addComponent(searchResultSection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bookSearchSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(8, 8, 8)
-                        .addComponent(studentSearchSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(studentSearchSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bookSearchSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -705,13 +727,13 @@ public class LibraryInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -738,7 +760,6 @@ public class LibraryInterface extends javax.swing.JFrame {
     private javax.swing.JPanel studentSearchSection;
     private javax.swing.JPanel studentSectionButtons;
     private javax.swing.JPanel studentSectionDisplay;
-    private javax.swing.JLabel studentSectionLabel;
     private javax.swing.JRadioButton toggleByBook;
     private javax.swing.JRadioButton toggleByStudent;
     // End of variables declaration//GEN-END:variables
