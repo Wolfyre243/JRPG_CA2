@@ -1,0 +1,6 @@
+5;
+Java 123;Tan Ken;89011;12.9;Programming;true;
+Python for Data Science;Karen Lim;76111;29.9;Gen AI;true;
+JavaScript for Beginner;Paul Mad;30011;28.9;Programming;true;
+Learn to Design Mobile App;Joan Chan;66011;25.9;Design;true;
+Flutter ABC;Tim Joe;32011;33.9;Mobile App;true;
