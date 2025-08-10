@@ -5,6 +5,9 @@ package jrpg_ca2;
  * @author Jayden
  */
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,12 +17,64 @@ import javax.swing.JTable;
 
 public class BookManagement {
     final private ArrayList<Book> bookStore;
+    final private ArrayList<Student> studentStore;
 
-    final private static SoundPlayer errorAudio = new SoundPlayer("error.wav");
+    private String filePath = "src/jrpg_ca2/books.txt";
+
+    final private static SoundPlayer errorAudio = new SoundPlayer("jrpg_ca2/error.wav");
 
      public BookManagement() {
         this.bookStore = new ArrayList<Book>();
+        this.studentStore = new ArrayList<Student>();
     }
+     
+     public void loadAllData() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
+//            System.out.println("Books List:");
+//            System.out.println("-----------------");
+            String line;
+
+            // Read the first line to get number of records for Books
+            String records = reader.readLine();
+            records = records.trim().replaceAll(";$", "");
+            int intRecords = Integer.parseInt(records);
+//            Student[] addStudents = new Student[intRecords];
+
+            System.out.println(records);
+
+            // Read Book Data
+            for (int i = 0; i < intRecords; i++) {
+                /* Read Book Data */
+                line = reader.readLine();
+
+                // Read Book data
+                //if (line.trim().isEmpty()) continue;
+                // Remove trailing semicolon and split by semicolon
+                line = line.trim().replaceAll(";$", "");
+                String[] BookParts = line.split(";");
+
+                final Book newBook = new Book(BookParts[0], BookParts[1], BookParts[2], Double.parseDouble(BookParts[3]), BookParts[4], Boolean.parseBoolean(BookParts[5]));
+                System.out.println("Book Title: " + BookParts[0]);
+                System.out.println("Author: " + BookParts[1]);
+                System.out.println("ISBN: " + BookParts[2]);
+                System.out.println("Price: " + BookParts[3]);
+                System.out.println("Category: " + BookParts[4]);
+                System.out.println("Avaliable: " + BookParts[5]);
+                this.bookStore.add(newBook);
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error: The file 'books.txt' was not found or could not be read. " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        }
+    }
+     
+    public ArrayList<Book> getBookStore() {
+        return this.bookStore;
+    }
+
 
     // displayBooks
     public void displayBooks() {
@@ -41,7 +96,7 @@ public class BookManagement {
     }
 
     // searchBookByTitle
-    public void searchForBook(String searchTerm) {
+    public Book searchForBook(String searchTerm) {
         for (int i = 0; i < this.bookStore.size(); i++) {
             if (this.bookStore.get(i).getBookTitle().equalsIgnoreCase(searchTerm)) {
                 final String foundMsg = 
@@ -50,20 +105,20 @@ public class BookManagement {
                     "Book Author: " + this.bookStore.get(i).getAuthor() + "\n" +
                     "Avaliability: " + this.bookStore.get(i).getAvailableForLoan();
 
-                JOptionPane.showMessageDialog(null, foundMsg, "Search Result", JOptionPane.INFORMATION_MESSAGE);
-                return;
+//                JOptionPane.showMessageDialog(null, foundMsg, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                return this.bookStore.get(i);
             }
         }
 
         // If not found
         errorAudio.playSound();
 
-        JOptionPane.showMessageDialog(null, 
-            "Cannot find the book \"" + searchTerm + "\"",
-            "Book Not Found", 
-            JOptionPane.ERROR_MESSAGE
-        );
-        return;
+//        JOptionPane.showMessageDialog(null, 
+//            "Cannot find the book \"" + searchTerm + "\"",
+//            "Book Not Found", 
+//            JOptionPane.ERROR_MESSAGE
+//        );
+        return null;
     }
 
     // addBook
@@ -176,6 +231,101 @@ public class BookManagement {
 
     }
 
+    public void deleteBook(String isbnToDelete) {
+
+    if (isbnToDelete.isEmpty()) {
+        errorAudio.playSound();
+        JOptionPane.showMessageDialog(
+                null,
+                "Please enter the ISBN of the book to delete.",
+                "Delete Book",
+                JOptionPane.ERROR_MESSAGE
+        );
+        return;
+    }
+
+    // Step 1: Locate the book and store index
+    Book bookToDelete = null;
+    int bookIndexToRemove = -1;
+    for (int i = 0; i < bookStore.size(); i++) {
+        Book b = bookStore.get(i);
+        if (b.getISBN().equalsIgnoreCase(isbnToDelete)) {
+            bookToDelete = b;
+            bookIndexToRemove = i;
+            break;
+        }
+    }
+
+    // Step 2: Book not found
+    if (bookToDelete == null) {
+        errorAudio.playSound();
+        JOptionPane.showMessageDialog(
+                null,
+                "Book with ISBN \"" + isbnToDelete + "\" not found.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+        return;
+    }
+
+    // Step 3: Show book info and confirm
+    String bookInfo = String.format(
+            "Are you sure you want to delete this book?\n\n"
+            + "Title: %s\n"
+            + "Author: %s\n"
+            + "ISBN: %s\n"
+            + "Price: $%.2f\n"
+            + "Category: %s\n"
+            + "Available: %s",
+            bookToDelete.getBookTitle(),
+            bookToDelete.getAuthor(),
+            bookToDelete.getISBN(),
+            bookToDelete.getPrice(),
+            bookToDelete.getCategory(),
+            bookToDelete.getAvailableForLoan() ? "Yes" : "No"
+    );
+
+        int confirm = JOptionPane.showConfirmDialog(
+            null,
+            bookInfo,
+            "Confirm Book Deletion",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Step 4: Update all students' borrowed list
+        for (int i = 0; i < bookStore.size(); i++) {
+            Student student = studentStore.get(i);
+            ArrayList<Book> borrowed = student.getBorrowedBooks();
+
+            for (int j = 0; j < borrowed.size(); j++) {
+                Book borrowedBook = borrowed.get(j);
+                if (borrowedBook.getISBN().equalsIgnoreCase(isbnToDelete)) {
+                    borrowed.remove(j);
+                    j--; // Decrement j since list size has changed
+                }
+            }
+        }
+
+   // Step 5: Remove the book from the main book list
+    bookStore.remove(bookIndexToRemove);
+
+    JOptionPane.showMessageDialog(
+            null,
+            "Book deleted successfully.",
+            "Success",
+            JOptionPane.INFORMATION_MESSAGE
+    );
+
+    // Step 6: Adjust index if needed
+    if (bookIndexToRemove >= bookStore.size()) {
+        bookIndexToRemove = bookStore.size() - 1;
+    }
+}
+    
     public double getTotalbookCost() {
         double totalBookCost = 0.0;
 

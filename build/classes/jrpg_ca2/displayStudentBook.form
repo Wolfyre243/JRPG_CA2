@@ -31,7 +31,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPane1" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
@@ -54,14 +54,9 @@
                               <Component id="exitBtn" min="-2" pref="75" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="studentNumber" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -79,12 +74,10 @@
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="exitBtn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jPanel2" max="32767" attributes="0"/>
-                  <Component id="jPanel1" max="32767" attributes="0"/>
+                  <Component id="studentNumber" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -117,11 +110,15 @@
         <Property name="text" type="java.lang.String" value="Student and Book Management"/>
       </Properties>
     </Component>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="studentNumber">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder/>
+            <TitledBorder position="2" title="Student x of x">
+              <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+                <EtchetBorder/>
+              </Border>
+            </TitledBorder>
           </Border>
         </Property>
       </Properties>
@@ -144,7 +141,7 @@
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="createBtn" min="-2" pref="75" max="-2" attributes="0"/>
+                              <Component id="createBtnStudent" min="-2" pref="75" max="-2" attributes="0"/>
                               <Component id="deleteBtn" min="-2" pref="75" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -170,7 +167,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="nameField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="createBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="createBtnStudent" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -237,32 +234,41 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="First"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="firstBtnStudentActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="lastBtnStudent">
           <Properties>
             <Property name="text" type="java.lang.String" value="Last"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="lastBtnStudentActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="createBtn">
+        <Component class="javax.swing.JButton" name="createBtnStudent">
           <Properties>
             <Property name="text" type="java.lang.String" value="Create"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createBtnActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createBtnStudentActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="deleteBtn">
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteBtnActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel2">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder/>
+          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+            <EtchetBorder/>
           </Border>
         </Property>
       </Properties>
@@ -364,11 +370,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanel4" min="-2" pref="454" max="-2" attributes="0"/>
-                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="bookNumber" pref="460" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -376,23 +379,26 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
+                  <Component id="bookNumber" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Container class="javax.swing.JPanel" name="jPanel4">
+        <Container class="javax.swing.JPanel" name="bookNumber">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="cc" type="rgb"/>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder/>
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder position="2" title="Book x of x">
+                  <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                    <LineBorder/>
+                  </Border>
+                  <Font PropertyName="font" name="Segoe UI" size="14" style="0"/>
+                </TitledBorder>
               </Border>
             </Property>
           </Properties>
@@ -408,7 +414,7 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="avaliableLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                                      <Component id="avaliableField" max="32767" attributes="0"/>
+                                      <Component id="avaliabilityField" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="categoryLabel" min="-2" max="-2" attributes="0"/>
@@ -490,7 +496,7 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="avaliableLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="avaliableField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="avaliabilityField" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
@@ -507,7 +513,7 @@
                           <Component id="firstBtnBook" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lastBtnBook" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="39" max="32767" attributes="0"/>
+                      <EmptySpace pref="37" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -577,7 +583,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="categoryField">
             </Component>
-            <Component class="javax.swing.JTextField" name="avaliableField">
+            <Component class="javax.swing.JTextField" name="avaliabilityField">
             </Component>
             <Component class="javax.swing.JButton" name="addBookBtn">
               <Properties>
@@ -591,16 +597,25 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Delete Book"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteBookBtnActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="previousBtnBook">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Previous"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="previousBtnBookActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="nextBtnBook">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Next"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nextBtnBookActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="firstBtnBook">
               <Properties>
@@ -614,21 +629,14 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Last"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="lastBtnBookActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JLabel" name="jLabel4">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Book x of x"/>
-          </Properties>
-        </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabel3">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Student x of x"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="searchResultLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
