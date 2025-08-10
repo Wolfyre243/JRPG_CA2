@@ -1,8 +1,9 @@
 3;
 Tan Ben;p2501234;
-2;
+3;
 Java 123;Tan Ken;89011;12.9;Programming;
 Learn to Design Mobile App;Joan Chan;66011;25.9;Design;
+Python for Data Science;Karen Lim;76111;29.9;Gen AI;
 Janet Lee;p2589238;
 0;
 Danny Ang;p2523833;
