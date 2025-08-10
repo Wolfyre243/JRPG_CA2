@@ -1,9 +1,9 @@
 package jrpg_ca2;
 
 /**
- * Admin Number: 2429634
+ * Admin Number: 2429634 and p2424093
  * Class: DIT/FT/2A/01
- * @author Junkai
+ * @author Junkai and Lim Song Chern Jayden
  */
 
 import java.util.ArrayList;
@@ -36,6 +36,16 @@ public class Student {
 
     public ArrayList<Book> getBorrowedBooks() {
         return this.books;
+    }
+    
+    public Book getBorrowedBookByISBN(String ISBN) {
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getISBN().equals(ISBN)) {
+                return books.get(i);
+            }
+        }
+        
+        return null;
     }
 
     public void addBorrowedBook(Book book) {

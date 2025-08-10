@@ -1,14 +1,16 @@
 package jrpg_ca2;
 
 /**
- * Admin Number: 2424093 Class: DIT/FT/2A/01
+ * Admin Number: p2424093 Class: DIT/FT/2A/01
  *
- * @author Jayden
+ * @author Lim Song Chern Jayden
  */
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +21,6 @@ import javax.swing.JTable;
 public class BookManagement {
 
     final private ArrayList<Book> bookStore;
-    final private ArrayList<Student> studentStore;
 
     private String filePath = "src/jrpg_ca2/books.txt";
 
@@ -27,7 +28,6 @@ public class BookManagement {
 
     public BookManagement() {
         this.bookStore = new ArrayList<Book>();
-        this.studentStore = new ArrayList<Student>();
     }
 
     public void loadAllData() {
@@ -72,6 +72,34 @@ public class BookManagement {
             System.err.println("An error occurred: " + e.getMessage());
         }
     }
+
+    public void saveAllData() {
+    try {
+        PrintWriter printWriter = new PrintWriter(new FileWriter("src/jrpg_ca2/books.txt"));
+        
+        // Save book list length
+        printWriter.println(bookStore.size() + ";");
+        
+        for (int i = 0; i < bookStore.size(); i++) {
+            final Book currentBook = bookStore.get(i);
+            
+            printWriter.println(
+                currentBook.getBookTitle() + ";"
+                + currentBook.getAuthor() + ";"
+                + currentBook.getISBN() + ";"
+                + currentBook.getPrice() + ";"
+                + currentBook.getCategory() + ";"
+                + currentBook.getAvailableForLoan() + ";"
+            );
+        }
+        
+        printWriter.close();
+        
+    } catch (Exception e) {
+        System.err.println("Error saving book data to file: ");
+        e.printStackTrace();
+    }
+}
 
     public ArrayList<Book> getBookStore() {
         return this.bookStore;
@@ -242,7 +270,10 @@ public class BookManagement {
 
     }
 
-    public void deleteBook(String isbnToDelete) {
+
+
+
+    public void deleteBook(String isbnToDelete, StudentManagement studentManagement) {
 
         if (isbnToDelete.isEmpty()) {
             errorAudio.playSound();
@@ -308,18 +339,7 @@ public class BookManagement {
         }
 
         // Step 4: Update all students' borrowed list
-        for (int i = 0; i < bookStore.size(); i++) {
-            Student student = studentStore.get(i);
-            ArrayList<Book> borrowed = student.getBorrowedBooks();
-
-            for (int j = 0; j < borrowed.size(); j++) {
-                Book borrowedBook = borrowed.get(j);
-                if (borrowedBook.getISBN().equalsIgnoreCase(isbnToDelete)) {
-                    borrowed.remove(j);
-                    j--; // Decrement j since list size has changed
-                }
-            }
-        }
+        studentManagement.deleteBookFromStudent(isbnToDelete);
 
         // Step 5: Remove the book from the main book list
         bookStore.remove(bookIndexToRemove);
@@ -595,4 +615,23 @@ public class BookManagement {
             this.bookStore.add(bookArr[i]);
         }
     }
+
+    // Add these methods to BookManagement.java
+public void setBookAvailability(String ISBN, boolean availability) {
+    for (int i = 0; i < bookStore.size(); i++) {
+        Book book = bookStore.get(i);
+        if (book.getISBN().equalsIgnoreCase(ISBN)) {
+            book.setAvailableForLoan(availability);
+            break;
+        }
+    }
+}
+
+public void deleteStudentFromBooks(String studentID) {
+    for (int i = 0; i < bookStore.size(); i++) {
+        Book book = bookStore.get(i);
+        ArrayList<Student> reservationList = book.getReservationList();
+        reservationList.removeIf(student -> student.getAdminNumber().equalsIgnoreCase(studentID));
+    }
+}
 }
