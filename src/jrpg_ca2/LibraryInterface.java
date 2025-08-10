@@ -12,8 +12,9 @@ import javax.swing.JOptionPane;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 /**
- *
- * @author wolfy
+ * DIT/FT/2A/01
+ * p2429634
+ * @author Junkai
  */
 public class LibraryInterface extends javax.swing.JFrame {
 
@@ -856,7 +857,8 @@ public class LibraryInterface extends javax.swing.JFrame {
 
     private void borrowBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrowBookButtonActionPerformed
         // TODO add your handling code here:
-        currentStudent.addBorrowedBook(searchedBook);
+//        currentStudent.addBorrowedBook(searchedBook);
+        BookManagement.borrowBook(currentStudent, searchedBook);
     }//GEN-LAST:event_borrowBookButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed

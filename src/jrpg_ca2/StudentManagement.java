@@ -22,7 +22,7 @@ public class StudentManagement {
     private ArrayList<Student> studentStore;
     private String filePath = "src/jrpg_ca2/students.txt";
 
-    private static SoundPlayer errorAudio = new SoundPlayer("error.wav");
+    private static SoundPlayer errorAudio = new SoundPlayer("jrpg_ca2/error.wav");
 
     private PrintWriter printWriter;
 
