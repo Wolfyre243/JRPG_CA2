@@ -585,4 +585,23 @@ public class BookManagement {
             this.bookStore.add(bookArr[i]);
         }
     }
+
+    // Add these methods to BookManagement.java
+public void setBookAvailability(String ISBN, boolean availability) {
+    for (int i = 0; i < bookStore.size(); i++) {
+        Book book = bookStore.get(i);
+        if (book.getISBN().equalsIgnoreCase(ISBN)) {
+            book.setAvailableForLoan(availability);
+            break;
+        }
+    }
+}
+
+public void deleteStudentFromBooks(String studentID) {
+    for (int i = 0; i < bookStore.size(); i++) {
+        Book book = bookStore.get(i);
+        ArrayList<Student> reservationList = book.getReservationList();
+        reservationList.removeIf(student -> student.getAdminNumber().equalsIgnoreCase(studentID));
+    }
+}
 }
