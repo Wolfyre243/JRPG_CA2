@@ -1,7 +1,8 @@
 package jrpg_ca2;
+
 /**
- * Admin Number: 2424093
- * Class: DIT/FT/2A/01
+ * Admin Number: 2424093 Class: DIT/FT/2A/01
+ *
  * @author Jayden
  */
 
@@ -16,17 +17,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 public class BookManagement {
+
     final private ArrayList<Book> bookStore;
 
     private String filePath = "src/jrpg_ca2/books.txt";
 
     final private static SoundPlayer errorAudio = new SoundPlayer("jrpg_ca2/error.wav");
 
-     public BookManagement() {
+    public BookManagement() {
         this.bookStore = new ArrayList<Book>();
     }
-     
-     public void loadAllData() {
+
+    public void loadAllData() {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
 //            System.out.println("Books List:");
@@ -68,20 +70,19 @@ public class BookManagement {
             System.err.println("An error occurred: " + e.getMessage());
         }
     }
-     
+
     public ArrayList<Book> getBookStore() {
         return this.bookStore;
     }
 
-
     // displayBooks
     public void displayBooks() {
         Object[][] rows = new Object[bookStore.size()][4];
-        Object[] cols = { "Book", "Book Title", "Name", "Availability" };
+        Object[] cols = {"Book", "Book Title", "Name", "Availability"};
 
         for (int i = 0; i < bookStore.size(); i++) {
-            rows[i] = new Object[]{ 
-                i+1, 
+            rows[i] = new Object[]{
+                i + 1,
                 bookStore.get(i).getBookTitle(),
                 bookStore.get(i).getAuthor(),
                 bookStore.get(i).getAvailableForLoan()
@@ -94,41 +95,43 @@ public class BookManagement {
     }
 
     // searchBookByTitle
-    public void searchForBook(String searchTerm) {
+    public Book searchForBook(String searchTerm) {
         for (int i = 0; i < this.bookStore.size(); i++) {
             if (this.bookStore.get(i).getBookTitle().equalsIgnoreCase(searchTerm)) {
-                final String foundMsg = 
-                    "Book: \n" +
-                    "Book Title: " + this.bookStore.get(i).getBookTitle() + "\n" +
-                    "Book Author: " + this.bookStore.get(i).getAuthor() + "\n" +
-                    "Avaliability: " + this.bookStore.get(i).getAvailableForLoan();
+                final String foundMsg
+                        = "Book: \n"
+                        + "Book Title: " + this.bookStore.get(i).getBookTitle() + "\n"
+                        + "Book Author: " + this.bookStore.get(i).getAuthor() + "\n"
+                        + "Avaliability: " + this.bookStore.get(i).getAvailableForLoan();
 
-                JOptionPane.showMessageDialog(null, foundMsg, "Search Result", JOptionPane.INFORMATION_MESSAGE);
-                return;
+//                JOptionPane.showMessageDialog(null, foundMsg, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                return this.bookStore.get(i);
             }
         }
 
         // If not found
         errorAudio.playSound();
 
-        JOptionPane.showMessageDialog(null, 
-            "Cannot find the book \"" + searchTerm + "\"",
-            "Book Not Found", 
-            JOptionPane.ERROR_MESSAGE
-        );
-        return;
+//        JOptionPane.showMessageDialog(null, 
+//            "Cannot find the book \"" + searchTerm + "\"",
+//            "Book Not Found", 
+//            JOptionPane.ERROR_MESSAGE
+//        );
+        return null;
     }
 
     // addBook
     public void addBook() {
         final String dialogTitle = "Add new book";
         final String bookTitle = JOptionPane.showInputDialog(
-            null, 
-            "Enter the new book title:", dialogTitle, 
-            JOptionPane.QUESTION_MESSAGE
+                null,
+                "Enter the new book title:", dialogTitle,
+                JOptionPane.QUESTION_MESSAGE
         );
 
-        if (bookTitle == null) return;
+        if (bookTitle == null) {
+            return;
+        }
 
         final Pattern titlePattern = Pattern.compile("^[a-zA-Z0-9'\s]+$");
         final Matcher titleMatcher = titlePattern.matcher(bookTitle);
@@ -136,21 +139,23 @@ public class BookManagement {
         if (!titleMatcher.find()) {
             errorAudio.playSound();
             JOptionPane.showMessageDialog(
-                null, 
-                "Title can only contain letters, numbers and spaces.", 
-                "Input Error",
-                JOptionPane.ERROR_MESSAGE
+                    null,
+                    "Title can only contain letters, numbers and spaces.",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
             );
             return;
         }
 
         final String bookAuthor = JOptionPane.showInputDialog(
-            null, 
-            "Enter the new book author:", dialogTitle, 
-            JOptionPane.QUESTION_MESSAGE
+                null,
+                "Enter the new book author:", dialogTitle,
+                JOptionPane.QUESTION_MESSAGE
         );
 
-        if (bookAuthor == null) return;
+        if (bookAuthor == null) {
+            return;
+        }
 
         final Pattern authorPattern = Pattern.compile("^[a-zA-Z\s]+$");
         final Matcher authorMatcher = authorPattern.matcher(bookAuthor);
@@ -158,21 +163,23 @@ public class BookManagement {
         if (!authorMatcher.find()) {
             errorAudio.playSound();
             JOptionPane.showMessageDialog(
-                null, 
-                "Author name can only contain letters and spaces.", 
-                "Input Error",
-                JOptionPane.ERROR_MESSAGE
+                    null,
+                    "Author name can only contain letters and spaces.",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
             );
             return;
         }
 
         final String bookISBN = JOptionPane.showInputDialog(
-            null, 
-            "Enter the new book ISBN:", dialogTitle, 
-            JOptionPane.QUESTION_MESSAGE
+                null,
+                "Enter the new book ISBN:", dialogTitle,
+                JOptionPane.QUESTION_MESSAGE
         );
 
-        if (bookISBN == null) return;
+        if (bookISBN == null) {
+            return;
+        }
 
         final Pattern ISBNPattern = Pattern.compile("^[0-9]+$");
         final Matcher ISBNMatcher = ISBNPattern.matcher(bookISBN);
@@ -180,32 +187,36 @@ public class BookManagement {
         if (!ISBNMatcher.find()) {
             errorAudio.playSound();
             JOptionPane.showMessageDialog(
-                null, 
-                "ISBN can only contain numbers.", 
-                "Input Error",
-                JOptionPane.ERROR_MESSAGE
+                    null,
+                    "ISBN can only contain numbers.",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
             );
             return;
         }
 
         final String bookPriceStr = JOptionPane.showInputDialog(
-            null, 
-            "Enter the new book price:", dialogTitle, 
-            JOptionPane.QUESTION_MESSAGE
+                null,
+                "Enter the new book price:", dialogTitle,
+                JOptionPane.QUESTION_MESSAGE
         );
 
-        if (bookPriceStr == null) return;
+        if (bookPriceStr == null) {
+            return;
+        }
 
         double bookPrice = Double.parseDouble(bookPriceStr);
 
         final String bookCategory = JOptionPane.showInputDialog(
-            null, 
-            "Enter the new book category:", dialogTitle, 
-            JOptionPane.QUESTION_MESSAGE
+                null,
+                "Enter the new book category:", dialogTitle,
+                JOptionPane.QUESTION_MESSAGE
         );
 
         // If user pressed cancel, stop student creation
-        if (bookCategory == null) return;
+        if (bookCategory == null) {
+            return;
+        }
 
         final Pattern categoryPattern = Pattern.compile("^[a-zA-Z\s]+$");
         final Matcher categoryMatcher = categoryPattern.matcher(bookCategory);
@@ -213,10 +224,10 @@ public class BookManagement {
         if (!categoryMatcher.find()) {
             errorAudio.playSound();
             JOptionPane.showMessageDialog(
-                null, 
-                "Category can only contain letters and spaces.", 
-                "Input Error",
-                JOptionPane.ERROR_MESSAGE
+                    null,
+                    "Category can only contain letters and spaces.",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
             );
             return;
         }
@@ -234,65 +245,63 @@ public class BookManagement {
 
     public void deleteBook(String isbnToDelete, StudentManagement studentManagement) {
 
-    if (isbnToDelete.isEmpty()) {
-        errorAudio.playSound();
-        JOptionPane.showMessageDialog(
-                null,
-                "Please enter the ISBN of the book to delete.",
-                "Delete Book",
-                JOptionPane.ERROR_MESSAGE
-        );
-        return;
-    }
-
-    // Step 1: Locate the book and store index
-//    Book bookToDelete = null;
-//    int bookIndexToRemove = -1;
-    for (int i = 0; i < bookStore.size(); i++) {
-        Book b = bookStore.get(i);
-        if (b.getISBN().equalsIgnoreCase(isbnToDelete)) {
-//            bookToDelete = b;
-//            bookIndexToRemove = i;
-            b.setAvailableForLoan(true);
-            bookStore.remove(b);
-            break;
+        if (isbnToDelete.isEmpty()) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Please enter the ISBN of the book to delete.",
+                    "Delete Book",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
         }
-    }
 
-    // Step 2: Book not found
-//    if (bookToDelete == null) {
-//        errorAudio.playSound();
-//        JOptionPane.showMessageDialog(
-//                null,
-//                "Book with ISBN \"" + isbnToDelete + "\" not found.",
-//                "Error",
-//                JOptionPane.ERROR_MESSAGE
-//        );
-//        return;
-//    }
+        // Step 1: Locate the book and store index
+        Book bookToDelete = null;
+        int bookIndexToRemove = -1;
+        for (int i = 0; i < bookStore.size(); i++) {
+            Book b = bookStore.get(i);
+            if (b.getISBN().equalsIgnoreCase(isbnToDelete)) {
+                bookToDelete = b;
+                bookIndexToRemove = i;
+                break;
+            }
+        }
 
-    // Step 3: Show book info and confirm
-    String bookInfo = String.format(
-            "Are you sure you want to delete this book?\n\n"
-//            + "Title: %s\n"
-//            + "Author: %s\n"
-//            + "ISBN: %s\n"
-//            + "Price: $%.2f\n"
-//            + "Category: %s\n"
-//            + "Available: %s",
-//            bookToDelete.getBookTitle(),
-//            bookToDelete.getAuthor(),
-//            bookToDelete.getISBN(),
-//            bookToDelete.getPrice(),
-//            bookToDelete.getCategory(),
-//            bookToDelete.getAvailableForLoan() ? "Yes" : "No"
-    );
+        // Step 2: Book not found
+        if (bookToDelete == null) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Book with ISBN \"" + isbnToDelete + "\" not found.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        // Step 3: Show book info and confirm
+        String bookInfo = String.format(
+                "Are you sure you want to delete this book?\n\n"
+                + "Title: %s\n"
+                + "Author: %s\n"
+                + "ISBN: %s\n"
+                + "Price: $%.2f\n"
+                + "Category: %s\n"
+                + "Available: %s",
+                bookToDelete.getBookTitle(),
+                bookToDelete.getAuthor(),
+                bookToDelete.getISBN(),
+                bookToDelete.getPrice(),
+                bookToDelete.getCategory(),
+                bookToDelete.getAvailableForLoan() ? "Yes" : "No"
+        );
 
         int confirm = JOptionPane.showConfirmDialog(
-            null,
-            bookInfo,
-            "Confirm Book Deletion",
-            JOptionPane.YES_NO_OPTION
+                null,
+                bookInfo,
+                "Confirm Book Deletion",
+                JOptionPane.YES_NO_OPTION
         );
 
         if (confirm != JOptionPane.YES_OPTION) {
@@ -302,22 +311,27 @@ public class BookManagement {
         // Step 4: Update all students' borrowed list
         studentManagement.deleteBookFromStudent(isbnToDelete);
 
-   // Step 5: Remove the book from the main book list
-//    bookStore.remove(bookIndexToRemove);
+        // Step 5: Remove the book from the main book list
+        bookStore.remove(bookIndexToRemove);
 
-    JOptionPane.showMessageDialog(
-            null,
-            "Book deleted successfully.",
-            "Success",
-            JOptionPane.INFORMATION_MESSAGE
-    );
-}
-    
+        JOptionPane.showMessageDialog(
+                null,
+                "Book deleted successfully.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+
+        // Step 6: Adjust index if needed
+        if (bookIndexToRemove >= bookStore.size()) {
+            bookIndexToRemove = bookStore.size() - 1;
+        }
+    }
+
     public double getTotalbookCost() {
         double totalBookCost = 0.0;
 
         for (int i = 0; i < bookStore.size(); i++) {
-        totalBookCost += bookStore.get(i).getPrice();
+            totalBookCost += bookStore.get(i).getPrice();
         }
         return totalBookCost;
     }
@@ -328,22 +342,22 @@ public class BookManagement {
             student.addBorrowedBook(book);
             book.setAvailableForLoan(false); // Mark the book as not available for loan
 
-            JOptionPane.showMessageDialog(
-                null,
-                "Book '" + book.getBookTitle() + "' borrowed successfully by " + student.getName() + "(" + student.getAdminNumber() + ").",
-                "Book Borrowed Successfully",
-                JOptionPane.INFORMATION_MESSAGE
-            );
+//            JOptionPane.showMessageDialog(
+//                    null,
+//                    "Book '" + book.getBookTitle() + "' borrowed successfully by " + student.getName() + "(" + student.getAdminNumber() + ").",
+//                    "Book Borrowed Successfully",
+//                    JOptionPane.INFORMATION_MESSAGE
+//            );
 
         } else {
             // If the book is not available for loan, display an error message
             errorAudio.playSound();
-            JOptionPane.showMessageDialog(
-                null,
-                "Sorry, you cannot borrow the book \'" + book.getBookTitle() + "\' at this time. Try reserving it instead.",
-                "Book Unavailable",
-                JOptionPane.ERROR_MESSAGE
-            );
+//            JOptionPane.showMessageDialog(
+//                    null,
+//                    "Sorry, you cannot borrow the book \'" + book.getBookTitle() + "\' at this time. Try reserving it instead.",
+//                    "Book Unavailable",
+//                    JOptionPane.ERROR_MESSAGE
+//            );
         }
     }
 
@@ -352,13 +366,13 @@ public class BookManagement {
         if (student.getBorrowedBooks().size() == 0) {
             errorAudio.playSound();
             JOptionPane.showMessageDialog(
-                null,
-                "You have no books borrowed!",
-                "Not Found",
-                JOptionPane.ERROR_MESSAGE
+                    null,
+                    "You have no books borrowed!",
+                    "Not Found",
+                    JOptionPane.ERROR_MESSAGE
             );
 
-            return; 
+            return;
         }
 
         if (student.getBorrowedBooks().contains(book)) {
@@ -374,37 +388,37 @@ public class BookManagement {
             }
 
             JOptionPane.showMessageDialog(
-                null,
-                "Book '" + book.getBookTitle() + "' returned successfully by " + student.getName() + "(" + student.getAdminNumber() + ").",
-                "Book Returned Successfully",
-                JOptionPane.INFORMATION_MESSAGE
+                    null,
+                    "Book '" + book.getBookTitle() + "' returned successfully by " + student.getName() + "(" + student.getAdminNumber() + ").",
+                    "Book Returned Successfully",
+                    JOptionPane.INFORMATION_MESSAGE
             );
 
         } else {
             // If the book is not borrowed by the student, display an error message
             errorAudio.playSound();
             JOptionPane.showMessageDialog(
-                null,
-                "You cannot return the book \'" + book.getBookTitle() + "\' as it was never borrowed by you.",
-                "Book Not Borrowed",
-                JOptionPane.ERROR_MESSAGE
+                    null,
+                    "You cannot return the book \'" + book.getBookTitle() + "\' as it was never borrowed by you.",
+                    "Book Not Borrowed",
+                    JOptionPane.ERROR_MESSAGE
             );
         }
     }
 
     public void borrowOrReturnBook(Student studentUser) {
         final String menuTitle = "Borrow or Return Books";
-        final String menu = 
-            "Logged in as: " + studentUser.getName() + " (" + studentUser.getAdminNumber() + ")\n" +
-            "\n" +
-            "Enter your option:\n" +
-            "\n" +
-            "1. View Borrowed Books\n" +
-            "2. Return a Book\n" +
-            "3. Borrow a Book\n" +
-            "4. Reserve a Book\n" +
-            "5. Exit\n" +
-            "\n";
+        final String menu
+                = "Logged in as: " + studentUser.getName() + " (" + studentUser.getAdminNumber() + ")\n"
+                + "\n"
+                + "Enter your option:\n"
+                + "\n"
+                + "1. View Borrowed Books\n"
+                + "2. Return a Book\n"
+                + "3. Borrow a Book\n"
+                + "4. Reserve a Book\n"
+                + "5. Exit\n"
+                + "\n";
 
         int userChoice = 5;
 
@@ -426,19 +440,19 @@ public class BookManagement {
                         displayMsg = "You have no borrowed books!";
                     } else {
                         for (int i = 0; i < studentBooks.size(); i++) {
-                            displayMsg += 
-                                "Book " + (i + 1) + ":\n" +
-                                "Title: " + studentBooks.get(i).getBookTitle() + "\n" +
-                                "Author: " + studentBooks.get(i).getAuthor() + "\n" +
-                                "ISBN: " + studentBooks.get(i).getISBN() + "\n" +
-                                "\n";
+                            displayMsg
+                                    += "Book " + (i + 1) + ":\n"
+                                    + "Title: " + studentBooks.get(i).getBookTitle() + "\n"
+                                    + "Author: " + studentBooks.get(i).getAuthor() + "\n"
+                                    + "ISBN: " + studentBooks.get(i).getISBN() + "\n"
+                                    + "\n";
                         }
                     }
 
                     JOptionPane.showMessageDialog(
-                        null, 
-                        displayMsg, menuTitle, 
-                        JOptionPane.INFORMATION_MESSAGE
+                            null,
+                            displayMsg, menuTitle,
+                            JOptionPane.INFORMATION_MESSAGE
                     );
 
                 } else if (userChoice == 2) {
@@ -446,9 +460,9 @@ public class BookManagement {
                     Book bookToReturn = null;
 
                     final String bookISBN = JOptionPane.showInputDialog(
-                        null,
-                        "ISBN of the book to return:", menuTitle, 
-                        JOptionPane.QUESTION_MESSAGE
+                            null,
+                            "ISBN of the book to return:", menuTitle,
+                            JOptionPane.QUESTION_MESSAGE
                     );
 
                     for (int i = 0; i < this.bookStore.size(); i++) {
@@ -460,9 +474,9 @@ public class BookManagement {
                     if (bookToReturn == null) {
                         errorAudio.playSound();
                         JOptionPane.showMessageDialog(
-                            null, 
-                            "No book with ISBN " + bookISBN + " found!", menuTitle, 
-                            JOptionPane.ERROR_MESSAGE
+                                null,
+                                "No book with ISBN " + bookISBN + " found!", menuTitle,
+                                JOptionPane.ERROR_MESSAGE
                         );
                     } else {
                         returnBook(studentUser, bookToReturn);
@@ -473,9 +487,9 @@ public class BookManagement {
                     Book bookToBorrow = null;
 
                     final String bookISBN = JOptionPane.showInputDialog(
-                        null,
-                        "ISBN of the book to borrow:", menuTitle, 
-                        JOptionPane.QUESTION_MESSAGE
+                            null,
+                            "ISBN of the book to borrow:", menuTitle,
+                            JOptionPane.QUESTION_MESSAGE
                     );
 
                     for (int i = 0; i < this.bookStore.size(); i++) {
@@ -487,9 +501,9 @@ public class BookManagement {
                     if (bookToBorrow == null) {
                         errorAudio.playSound();
                         JOptionPane.showMessageDialog(
-                            null, 
-                            "No book with ISBN " + bookISBN + " found!", menuTitle, 
-                            JOptionPane.ERROR_MESSAGE
+                                null,
+                                "No book with ISBN " + bookISBN + " found!", menuTitle,
+                                JOptionPane.ERROR_MESSAGE
                         );
                     } else {
                         borrowBook(studentUser, bookToBorrow);
@@ -499,9 +513,9 @@ public class BookManagement {
                     Book bookToReserve = null;
 
                     final String bookISBN = JOptionPane.showInputDialog(
-                        null,
-                        "ISBN of the book to reserve:", menuTitle, 
-                        JOptionPane.QUESTION_MESSAGE
+                            null,
+                            "ISBN of the book to reserve:", menuTitle,
+                            JOptionPane.QUESTION_MESSAGE
                     );
 
                     for (int i = 0; i < this.bookStore.size(); i++) {
@@ -513,39 +527,39 @@ public class BookManagement {
                     if (bookToReserve == null) {
                         errorAudio.playSound();
                         JOptionPane.showMessageDialog(
-                            null, 
-                            "No book with ISBN " + bookISBN + " found!", menuTitle, 
-                            JOptionPane.ERROR_MESSAGE
+                                null,
+                                "No book with ISBN " + bookISBN + " found!", menuTitle,
+                                JOptionPane.ERROR_MESSAGE
                         );
                     } else {
                         // If user had already reserved book
                         if (bookToReserve.getReservationList().contains(studentUser)) {
                             errorAudio.playSound();
                             JOptionPane.showMessageDialog(
-                                null, 
-                                "You already have a pending reservation for this book!", menuTitle, 
-                                JOptionPane.ERROR_MESSAGE
+                                    null,
+                                    "You already have a pending reservation for this book!", menuTitle,
+                                    JOptionPane.ERROR_MESSAGE
                             );
                         } else if (studentUser.getBorrowedBooks().contains(bookToReserve)) {
                             errorAudio.playSound();
                             JOptionPane.showMessageDialog(
-                                null, 
-                                "You've already borrowed this book!", menuTitle, 
-                                JOptionPane.ERROR_MESSAGE
+                                    null,
+                                    "You've already borrowed this book!", menuTitle,
+                                    JOptionPane.ERROR_MESSAGE
                             );
                         } else if (bookToReserve.getAvailableForLoan()) {
                             errorAudio.playSound();
                             JOptionPane.showMessageDialog(
-                                null, 
-                                "This book is available for loan, please borrow it instead.", menuTitle, 
-                                JOptionPane.ERROR_MESSAGE
+                                    null,
+                                    "This book is available for loan, please borrow it instead.", menuTitle,
+                                    JOptionPane.ERROR_MESSAGE
                             );
                         } else {
                             bookToReserve.addToReservationList(studentUser);
                             JOptionPane.showMessageDialog(
-                                null, 
-                                "Successfully reserved book! (ISBN " + bookISBN + ")", menuTitle, 
-                                JOptionPane.INFORMATION_MESSAGE
+                                    null,
+                                    "Successfully reserved book! (ISBN " + bookISBN + ")", menuTitle,
+                                    JOptionPane.INFORMATION_MESSAGE
                             );
                         }
                     }
@@ -571,29 +585,4 @@ public class BookManagement {
             this.bookStore.add(bookArr[i]);
         }
     }
-
-
-
-// Add these methods to BookManagement.java
-public void setBookAvailability(String ISBN, boolean availability) {
-    for (int i = 0; i < bookStore.size(); i++) {
-        Book book = bookStore.get(i);
-        if (book.getISBN().equalsIgnoreCase(ISBN)) {
-            book.setAvailableForLoan(availability);
-            break;
-        }
-    }
 }
-
-public void deleteStudentFromBooks(String studentID) {
-    for (int i = 0; i < bookStore.size(); i++) {
-        Book book = bookStore.get(i);
-        ArrayList<Student> reservationList = book.getReservationList();
-        reservationList.removeIf(student -> student.getAdminNumber().equalsIgnoreCase(studentID));
-    }
-}
-}
-
-
-
-
