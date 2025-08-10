@@ -17,7 +17,6 @@ import javax.swing.JTable;
 
 public class BookManagement {
     final private ArrayList<Book> bookStore;
-    final private ArrayList<Student> studentStore;
 
     private String filePath = "src/jrpg_ca2/books.txt";
 
@@ -25,7 +24,6 @@ public class BookManagement {
 
      public BookManagement() {
         this.bookStore = new ArrayList<Book>();
-        this.studentStore = new ArrayList<Student>();
     }
      
      public void loadAllData() {
@@ -231,7 +229,10 @@ public class BookManagement {
 
     }
 
-    public void deleteBook(String isbnToDelete) {
+
+
+
+    public void deleteBook(String isbnToDelete, StudentManagement studentManagement) {
 
     if (isbnToDelete.isEmpty()) {
         errorAudio.playSound();
@@ -245,44 +246,46 @@ public class BookManagement {
     }
 
     // Step 1: Locate the book and store index
-    Book bookToDelete = null;
-    int bookIndexToRemove = -1;
+//    Book bookToDelete = null;
+//    int bookIndexToRemove = -1;
     for (int i = 0; i < bookStore.size(); i++) {
         Book b = bookStore.get(i);
         if (b.getISBN().equalsIgnoreCase(isbnToDelete)) {
-            bookToDelete = b;
-            bookIndexToRemove = i;
+//            bookToDelete = b;
+//            bookIndexToRemove = i;
+            b.setAvailableForLoan(true);
+            bookStore.remove(b);
             break;
         }
     }
 
     // Step 2: Book not found
-    if (bookToDelete == null) {
-        errorAudio.playSound();
-        JOptionPane.showMessageDialog(
-                null,
-                "Book with ISBN \"" + isbnToDelete + "\" not found.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-        );
-        return;
-    }
+//    if (bookToDelete == null) {
+//        errorAudio.playSound();
+//        JOptionPane.showMessageDialog(
+//                null,
+//                "Book with ISBN \"" + isbnToDelete + "\" not found.",
+//                "Error",
+//                JOptionPane.ERROR_MESSAGE
+//        );
+//        return;
+//    }
 
     // Step 3: Show book info and confirm
     String bookInfo = String.format(
             "Are you sure you want to delete this book?\n\n"
-            + "Title: %s\n"
-            + "Author: %s\n"
-            + "ISBN: %s\n"
-            + "Price: $%.2f\n"
-            + "Category: %s\n"
-            + "Available: %s",
-            bookToDelete.getBookTitle(),
-            bookToDelete.getAuthor(),
-            bookToDelete.getISBN(),
-            bookToDelete.getPrice(),
-            bookToDelete.getCategory(),
-            bookToDelete.getAvailableForLoan() ? "Yes" : "No"
+//            + "Title: %s\n"
+//            + "Author: %s\n"
+//            + "ISBN: %s\n"
+//            + "Price: $%.2f\n"
+//            + "Category: %s\n"
+//            + "Available: %s",
+//            bookToDelete.getBookTitle(),
+//            bookToDelete.getAuthor(),
+//            bookToDelete.getISBN(),
+//            bookToDelete.getPrice(),
+//            bookToDelete.getCategory(),
+//            bookToDelete.getAvailableForLoan() ? "Yes" : "No"
     );
 
         int confirm = JOptionPane.showConfirmDialog(
@@ -297,21 +300,10 @@ public class BookManagement {
         }
 
         // Step 4: Update all students' borrowed list
-        for (int i = 0; i < bookStore.size(); i++) {
-            Student student = studentStore.get(i);
-            ArrayList<Book> borrowed = student.getBorrowedBooks();
-
-            for (int j = 0; j < borrowed.size(); j++) {
-                Book borrowedBook = borrowed.get(j);
-                if (borrowedBook.getISBN().equalsIgnoreCase(isbnToDelete)) {
-                    borrowed.remove(j);
-                    j--; // Decrement j since list size has changed
-                }
-            }
-        }
+        studentManagement.deleteBookFromStudent(isbnToDelete);
 
    // Step 5: Remove the book from the main book list
-    bookStore.remove(bookIndexToRemove);
+//    bookStore.remove(bookIndexToRemove);
 
     JOptionPane.showMessageDialog(
             null,
@@ -319,11 +311,6 @@ public class BookManagement {
             "Success",
             JOptionPane.INFORMATION_MESSAGE
     );
-
-    // Step 6: Adjust index if needed
-    if (bookIndexToRemove >= bookStore.size()) {
-        bookIndexToRemove = bookStore.size() - 1;
-    }
 }
     
     public double getTotalbookCost() {
@@ -584,7 +571,29 @@ public class BookManagement {
             this.bookStore.add(bookArr[i]);
         }
     }
+
+
+
+// Add these methods to BookManagement.java
+public void setBookAvailability(String ISBN, boolean availability) {
+    for (int i = 0; i < bookStore.size(); i++) {
+        Book book = bookStore.get(i);
+        if (book.getISBN().equalsIgnoreCase(ISBN)) {
+            book.setAvailableForLoan(availability);
+            break;
+        }
+    }
 }
+
+public void deleteStudentFromBooks(String studentID) {
+    for (int i = 0; i < bookStore.size(); i++) {
+        Book book = bookStore.get(i);
+        ArrayList<Student> reservationList = book.getReservationList();
+        reservationList.removeIf(student -> student.getAdminNumber().equalsIgnoreCase(studentID));
+    }
+}
+}
+
 
 
 

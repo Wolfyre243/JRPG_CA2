@@ -235,7 +235,24 @@ public class StudentManagement {
                 "Student added successfully.", dialogTitle,
                 JOptionPane.INFORMATION_MESSAGE
         );
+    }
 
+    
+    public void deleteBookFromStudent(String isbnToDelete) { 
+        for (int i = 0; i < studentStore.size(); i++) {
+            final Student student = studentStore.get(i);
+//            ArrayList<Book> borrowed = student.getBorrowedBooks();
+//            for (int j = 0; j < borrowed.size(); j++) { 
+//                if (borrowed.get(j).getISBN().equalsIgnoreCase(isbnToDelete)) {
+//                    student.getBorrowedBooks().remove(isbnToDelete);
+//                    j--; // Decrement j since list size has changed
+//                }
+//            }
+            final Book bookToRemove = student.getBorrowedBookByISBN(isbnToDelete);
+            if (bookToRemove != null) {
+                student.returnBorrowedBook(bookToRemove);
+            }
+        }
     }
     
     
@@ -249,4 +266,89 @@ public class StudentManagement {
             this.studentStore.add(studentsArr[i]);
         }
     }
+
+
+
+
+public void deleteStudent(String studentIDToDelete, BookManagement bookManagement) {
+    
+    if (studentIDToDelete.isEmpty()) {
+        errorAudio.playSound();
+        JOptionPane.showMessageDialog(
+                null,
+                "Please enter the studentID of the student to delete.",
+                "Delete Student",
+                JOptionPane.ERROR_MESSAGE
+        );
+        return;
+    }
+
+    // Step 1: Find the student to delete (DON'T delete yet!)
+    Student studentToDelete = null;
+    int studentIndex = -1;
+    
+    for (int i = 0; i < studentStore.size(); i++) {
+        Student student = studentStore.get(i);
+        if (student.getAdminNumber().equalsIgnoreCase(studentIDToDelete)) {
+            studentToDelete = student;
+            studentIndex = i;
+            break;
+        }
+    }
+
+    // Step 2: Check if student was found
+    if (studentToDelete == null) {
+        errorAudio.playSound();
+        JOptionPane.showMessageDialog(
+                null,
+                "Student with ID \"" + studentIDToDelete + "\" not found.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+        return;
+    }
+
+    // Step 3: Show STUDENT info and confirm deletion
+    String studentInfo = String.format(
+            "Are you sure you want to delete this student?\n\n"
+            + "Admin Number: %s\n"
+            + "Name: %s\n"
+            + "Books Borrowed: %d",
+            studentToDelete.getAdminNumber(),
+            studentToDelete.getName(),
+            studentToDelete.getBorrowedBooks().size()
+    );
+
+    int confirm = JOptionPane.showConfirmDialog(
+        null,
+        studentInfo,
+        "Confirm Student Deletion",  // Fixed title
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    // Step 4: BEFORE deleting student, update book availability
+    ArrayList<Book> borrowedBooks = studentToDelete.getBorrowedBooks();
+    for (Book book : borrowedBooks) {
+        // You need to add this method to BookManagement
+        bookManagement.setBookAvailability(book.getISBN(), true);
+    }
+    
+    // Step 5: Remove student from book reservation lists
+    // You need to add this method to BookManagement
+    bookManagement.deleteStudentFromBooks(studentIDToDelete);
+
+    // Step 6: NOW remove the student from the student list
+    studentStore.remove(studentIndex);
+
+    JOptionPane.showMessageDialog(
+            null,
+            "Student deleted successfully.",  // Fixed message
+            "Success",
+            JOptionPane.INFORMATION_MESSAGE
+    );
+}
 }

@@ -37,6 +37,16 @@ public class Student {
     public ArrayList<Book> getBorrowedBooks() {
         return this.books;
     }
+    
+    public Book getBorrowedBookByISBN(String ISBN) {
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getISBN().equals(ISBN)) {
+                return books.get(i);
+            }
+        }
+        
+        return null;
+    }
 
     public void addBorrowedBook(Book book) {
         this.books.add(book);

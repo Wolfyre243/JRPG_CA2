@@ -23,6 +23,7 @@ public class displayStudentBook extends javax.swing.JFrame {
     
     public int index;
     public int bookIndex;
+    public int studentIndex;
     
     private ArrayList<Student> allStudents;
     private ArrayList<Book> allBooks;
@@ -39,6 +40,7 @@ public class displayStudentBook extends javax.swing.JFrame {
         loadBooks();
         index = 0;
         bookIndex = 0;
+        studentIndex = 0;
         displayCurrentBook();
         displayCurrentStudent();
     }
@@ -887,6 +889,12 @@ public class displayStudentBook extends javax.swing.JFrame {
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
         // TODO add your handling code here:
+        String studentIDToDelete = studentIDField.getText().trim();
+
+        studentManagement.deleteStudent(studentIDToDelete, bookManagement);
+    
+        studentIndex = 0;
+        displayCurrentStudent();
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void deleteBookBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBookBtnActionPerformed
@@ -989,8 +997,10 @@ public class displayStudentBook extends javax.swing.JFrame {
 
     String isbnToDelete = ISBNField.getText().trim();
 
-    bookManagement.deleteBook(isbnToDelete);
-
+    bookManagement.deleteBook(isbnToDelete, studentManagement);
+    studentManagement.deleteBookFromStudent(isbnToDelete);
+    
+    bookIndex = 0;
     displayCurrentBook();
 
     }//GEN-LAST:event_deleteBookBtnActionPerformed
