@@ -5,14 +5,16 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 /**
- *
- * @author wolfy
+ * DIT/FT/2A/01
+ * p2429634
+ * @author Junkai
  */
 public class LibraryInterface extends javax.swing.JFrame {
 
@@ -26,6 +28,10 @@ public class LibraryInterface extends javax.swing.JFrame {
 
     private ArrayList<Student> allStudents;
     private ArrayList<Book> allStudentBooks;
+    private ArrayList<Book> allBooks;
+
+    private Student searchedStudent;
+    private Book searchedBook;
 
     private Student currentStudent;
 
@@ -35,6 +41,7 @@ public class LibraryInterface extends javax.swing.JFrame {
     public LibraryInterface() {
         initComponents();
         loadStudents();
+        loadBooks();
         index = 0;
         bookIndex = 0;
         displayStudents();
@@ -46,9 +53,14 @@ public class LibraryInterface extends javax.swing.JFrame {
         System.out.println(allStudents);
     }
 
+    public void loadBooks() {
+        bookManagement.loadAllData();
+        allBooks = bookManagement.getBookStore();
+        System.out.println(allBooks);
+    }
+
     public void displayStudents() {
         currentStudent = allStudents.get(index);
-        System.out.println(currentStudent);
         studentNameField.setText(currentStudent.getName());
         studentIDField.setText(currentStudent.getAdminNumber());
 
@@ -112,9 +124,9 @@ public class LibraryInterface extends javax.swing.JFrame {
         searchResultSection = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        searchResultBox = new javax.swing.JTextArea();
+        displayStudentInfoButton = new javax.swing.JButton();
+        borrowBookButton = new javax.swing.JButton();
         bookSearchSection = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
@@ -135,8 +147,8 @@ public class LibraryInterface extends javax.swing.JFrame {
         bookFirstButton = new javax.swing.JButton();
         bookLastButton = new javax.swing.JButton();
         studentReturnButton = new javax.swing.JButton();
-        ExitButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        exitButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1000, 700));
@@ -309,9 +321,17 @@ public class LibraryInterface extends javax.swing.JFrame {
 
         searchTypeToggle.add(toggleByBook);
         toggleByBook.setText("by Book");
+        toggleByBook.setActionCommand("Book");
+        toggleByBook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toggleByBookActionPerformed(evt);
+            }
+        });
 
         searchTypeToggle.add(toggleByStudent);
+        toggleByStudent.setSelected(true);
         toggleByStudent.setText("by Student");
+        toggleByBook.setActionCommand("Student");
         toggleByStudent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 toggleByStudentActionPerformed(evt);
@@ -326,6 +346,11 @@ public class LibraryInterface extends javax.swing.JFrame {
         });
 
         mainSearchButton.setText("Search");
+        mainSearchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainSearchButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout mainSearchBarLayout = new javax.swing.GroupLayout(mainSearchBar);
         mainSearchBar.setLayout(mainSearchBarLayout);
@@ -358,19 +383,26 @@ public class LibraryInterface extends javax.swing.JFrame {
 
         jLabel6.setText("Search Result:");
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jTextArea3.setFocusable(false);
-        jScrollPane3.setViewportView(jTextArea3);
+        searchResultBox.setColumns(20);
+        searchResultBox.setRows(5);
+        searchResultBox.setFocusable(false);
+        jScrollPane3.setViewportView(searchResultBox);
 
-        jButton2.setLabel("Display Student Info");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        displayStudentInfoButton.setText("Display Student Info");
+        displayStudentInfoButton.setEnabled(false);
+        displayStudentInfoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                displayStudentInfoButtonActionPerformed(evt);
             }
         });
 
-        jButton3.setLabel("Borrow Book");
+        borrowBookButton.setText("Borrow Book");
+        borrowBookButton.setEnabled(false);
+        borrowBookButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borrowBookButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout searchResultSectionLayout = new javax.swing.GroupLayout(searchResultSection);
         searchResultSection.setLayout(searchResultSectionLayout);
@@ -384,9 +416,9 @@ public class LibraryInterface extends javax.swing.JFrame {
                         .addGroup(searchResultSectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addGroup(searchResultSectionLayout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(displayStudentInfoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)))
+                                .addComponent(borrowBookButton)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -399,8 +431,8 @@ public class LibraryInterface extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(searchResultSectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(displayStudentInfoButton)
+                    .addComponent(borrowBookButton))
                 .addContainerGap())
         );
 
@@ -592,7 +624,7 @@ public class LibraryInterface extends javax.swing.JFrame {
                             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 412, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
                         .addComponent(studentReturnButton)))
                 .addGap(16, 16, 16))
         );
@@ -631,18 +663,15 @@ public class LibraryInterface extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        ExitButton.setBackground(new java.awt.Color(255, 102, 102));
-        ExitButton.setForeground(new java.awt.Color(255, 255, 255));
-        ExitButton.setText("Exit");
-        ExitButton.setName(""); // NOI18N
-        ExitButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ExitButtonActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Books Borrowed");
+
+        exitButton.setText("Exit");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -654,16 +683,19 @@ public class LibraryInterface extends javax.swing.JFrame {
                     .addComponent(Title)
                     .addComponent(mainSearchBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(studentSearchSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bookSearchSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchResultSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(ExitButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bookSearchSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(searchResultSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exitButton)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -671,7 +703,7 @@ public class LibraryInterface extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Title)
-                    .addComponent(ExitButton))
+                    .addComponent(exitButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(mainSearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -752,6 +784,94 @@ public class LibraryInterface extends javax.swing.JFrame {
         displayStudents();
     }//GEN-LAST:event_bookFirstButtonActionPerformed
 
+    private void mainSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainSearchButtonActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (toggleByStudent.isSelected() && !toggleByBook.isSelected()) {
+                borrowBookButton.setEnabled(false); // Disable the other side's button
+                final String searchTerm = mainSearchField.getText();
+
+                searchedStudent = studentManagement.searchForStudent(searchTerm);
+
+                searchResultBox.setText(
+                        "Name: " + searchedStudent.getName() + "\n"
+                        + "Student ID: " + searchedStudent.getAdminNumber() + "\n"
+                );
+                displayStudentInfoButton.setEnabled(true);
+
+            } else if (!toggleByStudent.isSelected() && toggleByBook.isSelected()) {
+                displayStudentInfoButton.setEnabled(false); // Disable the other side's button
+                final String searchTerm = mainSearchField.getText();
+
+                searchedBook = bookManagement.searchForBook(searchTerm);
+                final String availability = searchedBook.getAvailableForLoan() ? "Available" : "Not Available";
+
+                searchResultBox.setText(
+                        "Title: " + searchedBook.getBookTitle() + "\n"
+                        + "Author: " + searchedBook.getAuthor() + "\n"
+                        + "ISBN: " + searchedBook.getISBN() + "\n"
+                        + availability + " for Loan"
+                );
+
+                if (searchedBook.getAvailableForLoan()) {
+                    borrowBookButton.setEnabled(true);
+                } else {
+                    borrowBookButton.setEnabled(false);
+                }
+            }
+        } catch (NullPointerException e) {
+            if (toggleByStudent.isSelected() && !toggleByBook.isSelected()) {
+                searchResultBox.setText("Student not found.");
+                displayStudentInfoButton.setEnabled(false);
+            } else if (!toggleByStudent.isSelected() && toggleByBook.isSelected()) {
+                searchResultBox.setText("Book not found.");
+                borrowBookButton.setEnabled(false);
+            }
+        }
+    }//GEN-LAST:event_mainSearchButtonActionPerformed
+
+    private void toggleByBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleByBookActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_toggleByBookActionPerformed
+
+    private void displayStudentInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayStudentInfoButtonActionPerformed
+        // TODO add your handling code here:
+        final ArrayList<Book> studentBooks = searchedStudent.getBorrowedBooks();
+
+        String resultText
+                = "Name: " + searchedStudent.getName() + "\n"
+                + "Student ID: " + searchedStudent.getAdminNumber() + "\n\n"
+                + "Borrowed Books" + "\n\n";
+
+        for (int i = 0; i < studentBooks.size(); i++) {
+            final Book book = studentBooks.get(i);
+
+            resultText = resultText
+                    + "Title: " + book.getBookTitle() + "\n"
+                    + "Author: " + book.getAuthor() + "\n"
+                    + "ISBN: " + book.getISBN() + "\n\n";
+        }
+
+        searchResultBox.setText(resultText);
+    }//GEN-LAST:event_displayStudentInfoButtonActionPerformed
+
+    private void borrowBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrowBookButtonActionPerformed
+        // TODO add your handling code here:
+//        currentStudent.addBorrowedBook(searchedBook);
+        BookManagement.borrowBook(currentStudent, searchedBook);
+    }//GEN-LAST:event_borrowBookButtonActionPerformed
+
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+        // TODO add your handling code here:
+        try {
+            studentManagement.saveAllData();
+            JOptionPane.showMessageDialog(this, "Program Terminated.\nThank you!", "Message", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_exitButtonActionPerformed
+
     private void toggleByStudentActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_toggleByStudentActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_toggleByStudentActionPerformed
@@ -829,7 +949,6 @@ public class LibraryInterface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ExitButton;
     private javax.swing.JLabel Title;
     private javax.swing.JTextField bookAuthorField;
     private javax.swing.JTextField bookAvailabilityField;
@@ -840,8 +959,9 @@ public class LibraryInterface extends javax.swing.JFrame {
     private javax.swing.JButton bookPreviousButton;
     private javax.swing.JPanel bookSearchSection;
     private javax.swing.JTextField bookTitleField;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton borrowBookButton;
+    private javax.swing.JButton displayStudentInfoButton;
+    private javax.swing.JButton exitButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -859,10 +979,10 @@ public class LibraryInterface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea3;
     private javax.swing.JPanel mainSearchBar;
     private javax.swing.JButton mainSearchButton;
     private javax.swing.JTextField mainSearchField;
+    private javax.swing.JTextArea searchResultBox;
     private javax.swing.JPanel searchResultSection;
     private javax.swing.ButtonGroup searchTypeToggle;
     private javax.swing.JButton studentFirstButton;
