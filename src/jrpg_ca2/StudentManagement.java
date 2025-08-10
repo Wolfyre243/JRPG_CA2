@@ -1,9 +1,9 @@
 package jrpg_ca2;
 
 /**
- * Admin Number: 2429634 Class: DIT/FT/2A/01
+ * Admin Number: 2429634 and 2424093 Class: DIT/FT/2A/01
  *
- * @author Junkai
+ * @author Junkai and Lim Song Chern Jayden
  */
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -1,9 +1,9 @@
 package jrpg_ca2;
 
 /**
- * Admin Number: 2429634
+ * Admin Number: 2429634 and p2424093
  * Class: DIT/FT/2A/01
- * @author Junkai
+ * @author Junkai and Lim Song Chern Jayden
  */
 
 import java.util.ArrayList;

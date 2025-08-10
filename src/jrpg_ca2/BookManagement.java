@@ -1,14 +1,16 @@
 package jrpg_ca2;
 
 /**
- * Admin Number: 2424093 Class: DIT/FT/2A/01
+ * Admin Number: p2424093 Class: DIT/FT/2A/01
  *
- * @author Jayden
+ * @author Lim Song Chern Jayden
  */
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,6 +72,34 @@ public class BookManagement {
             System.err.println("An error occurred: " + e.getMessage());
         }
     }
+
+    public void saveAllData() {
+    try {
+        PrintWriter printWriter = new PrintWriter(new FileWriter("src/jrpg_ca2/books.txt"));
+        
+        // Save book list length
+        printWriter.println(bookStore.size() + ";");
+        
+        for (int i = 0; i < bookStore.size(); i++) {
+            final Book currentBook = bookStore.get(i);
+            
+            printWriter.println(
+                currentBook.getBookTitle() + ";"
+                + currentBook.getAuthor() + ";"
+                + currentBook.getISBN() + ";"
+                + currentBook.getPrice() + ";"
+                + currentBook.getCategory() + ";"
+                + currentBook.getAvailableForLoan() + ";"
+            );
+        }
+        
+        printWriter.close();
+        
+    } catch (Exception e) {
+        System.err.println("Error saving book data to file: ");
+        e.printStackTrace();
+    }
+}
 
     public ArrayList<Book> getBookStore() {
         return this.bookStore;

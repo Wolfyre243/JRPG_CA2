@@ -11,8 +11,9 @@ import java.util.Scanner;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 /**
- *
- * @author jayde
+ * DIT/FT/2A/01
+ * p2424093
+ * @author Lim Song Chern Jayden
  */
 public class displayStudentBook extends javax.swing.JFrame {
 
@@ -30,6 +31,10 @@ public class displayStudentBook extends javax.swing.JFrame {
     
     private Student currentStudent;
     private Book currentBook;
+    
+    private Student searchedStudent;
+    private Book searchedBook;
+
     /**
      * Creates new form displayStudentBook
      */
@@ -43,6 +48,10 @@ public class displayStudentBook extends javax.swing.JFrame {
         studentIndex = 0;
         displayCurrentBook();
         displayCurrentStudent();
+        
+        // Disable display buttons initially
+        displayStudentBtn.setEnabled(false);
+        displayBookBtn.setEnabled(false);
     }
         
     
@@ -292,6 +301,11 @@ public class displayStudentBook extends javax.swing.JFrame {
         });
 
         searchBtn.setText("Search");
+        searchBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -487,7 +501,7 @@ public class displayStudentBook extends javax.swing.JFrame {
                         .addComponent(addBookBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(deleteBookBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(138, 138, 138)))
+                        .addGap(126, 126, 126)))
                 .addGap(36, 36, 36)
                 .addGroup(bookNumberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(previousBtnBook)
@@ -503,7 +517,7 @@ public class displayStudentBook extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(bookNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 460, Short.MAX_VALUE)
+                .addComponent(bookNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 470, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -541,6 +555,11 @@ public class displayStudentBook extends javax.swing.JFrame {
         exitBtn.setBackground(new java.awt.Color(255, 204, 204));
         exitBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         exitBtn.setText("Exit");
+        exitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -552,13 +571,13 @@ public class displayStudentBook extends javax.swing.JFrame {
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(searchResultLabel)
                                     .addComponent(displayStudentBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(displayBookBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -726,6 +745,16 @@ public class displayStudentBook extends javax.swing.JFrame {
 
     private void searchBarFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBarFieldActionPerformed
         // TODO add your handling code here:
+        
+        // If search bar is cleared, disable display buttons and clear results
+        String searchText = searchBarField.getText().trim();
+        if (searchText.isEmpty()) {
+            displayStudentBtn.setEnabled(false);
+            displayBookBtn.setEnabled(false);
+            searchResultArea.setText("");
+            searchedStudent = null;
+            searchedBook = null;
+        }
     }//GEN-LAST:event_searchBarFieldActionPerformed
 
     private void titleFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleFieldActionPerformed
@@ -844,10 +873,53 @@ public class displayStudentBook extends javax.swing.JFrame {
 
     private void displayBookBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayBookBtnActionPerformed
         // TODO add your handling code here:
+        if (searchedBook != null) {
+            final String availability = searchedBook.getAvailableForLoan() ? "Available" : "Not Available";
+            
+            String resultText = "Book Details:\n"
+                    + "=============\n\n"
+                    + "Title: " + searchedBook.getBookTitle() + "\n"
+                    + "Author: " + searchedBook.getAuthor() + "\n"
+                    + "ISBN: " + searchedBook.getISBN() + "\n"
+                    + "Price: $" + String.format("%.2f", searchedBook.getPrice()) + "\n"
+                    + "Category: " + searchedBook.getCategory() + "\n"
+                    + "Avaliable: " + availability + " for Loan\n\n";
+            
+            searchResultArea.setText(resultText);
+        }
     }//GEN-LAST:event_displayBookBtnActionPerformed
 
     private void displayStudentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayStudentBtnActionPerformed
         // TODO add your handling code here:
+//    StringBuilder resultText = new StringBuilder();
+//    resultText.append("All Students:\n");
+//    resultText.append("=============\n\n");
+//    
+//    for (int i = 0; i < allStudents.size(); i++) {
+//        Student student = allStudents.get(i);
+//        resultText.append("Student ").append(i + 1).append(":\n");
+//        resultText.append("Name: ").append(student.getName()).append("\n");
+//        resultText.append("Student ID: ").append(student.getAdminNumber()).append("\n");
+//        resultText.append("\n");
+//    }
+//    
+        final ArrayList<Book> studentBooks = searchedStudent.getBorrowedBooks();
+
+        String resultText
+                = "Name: " + searchedStudent.getName() + "\n"
+                + "Student ID: " + searchedStudent.getAdminNumber() + "\n\n"
+                + "Borrowed Books" + "\n\n";
+
+        for (int i = 0; i < studentBooks.size(); i++) {
+            final Book book = studentBooks.get(i);
+
+            resultText = resultText
+                    + "Title: " + book.getBookTitle() + "\n"
+                    + "Author: " + book.getAuthor() + "\n"
+                    + "ISBN: " + book.getISBN() + "\n\n";
+        }
+
+        searchResultArea.setText(resultText);
     }//GEN-LAST:event_displayStudentBtnActionPerformed
 
     private void previousBtnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousBtnBookActionPerformed
@@ -1004,6 +1076,90 @@ public class displayStudentBook extends javax.swing.JFrame {
     displayCurrentBook();
 
     }//GEN-LAST:event_deleteBookBtnActionPerformed
+
+    private void exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBtnActionPerformed
+        // TODO add your handling code here:
+        try {
+            studentManagement.saveAllData();
+            bookManagement.saveAllData();
+            JOptionPane.showMessageDialog(this, "Program Terminated.\nThank you!", "Message", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_exitBtnActionPerformed
+
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+        // TODO add your handling code here:
+        String searchTerm = searchBarField.getText().trim();
+        
+        // Check if search term is empty
+        if (searchTerm.isEmpty()) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(this, 
+                "Please enter a search term.", 
+                "Search Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Check if neither radio button is selected
+        if (!studentRB.isSelected() && !bookRB.isSelected()) {
+            errorAudio.playSound();
+            JOptionPane.showMessageDialog(this, 
+                "Please select either 'by student' or 'by Book' option.", 
+                "Search Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        try {
+            if (studentRB.isSelected()) {
+                // Search for student
+                searchedStudent = studentManagement.searchForStudent(searchTerm);
+                
+                if (searchedStudent != null) {
+                    searchResultArea.setText(
+                            "Name: " + searchedStudent.getName() + "\n"
+                            + "Student ID: " + searchedStudent.getAdminNumber() + "\n"
+                            + "Books Borrowed: " + searchedStudent.getBorrowedBooks().size()
+                    );
+                    displayStudentBtn.setEnabled(true);  // Enable student display button
+                    displayBookBtn.setEnabled(false);    // Disable book display button
+                } else {
+                    searchResultArea.setText("Student not found.");
+                    displayStudentBtn.setEnabled(false);
+                    displayBookBtn.setEnabled(false);
+                }
+
+            } else if (bookRB.isSelected()) {
+                // Search for book
+                searchedBook = bookManagement.searchForBook(searchTerm);
+                
+                if (searchedBook != null) {
+                    final String availability = searchedBook.getAvailableForLoan() ? "Available" : "Not Available";
+                    searchResultArea.setText(
+                            "Title: " + searchedBook.getBookTitle() + "\n"
+                            + "Author: " + searchedBook.getAuthor() + "\n"
+                            + "ISBN: " + searchedBook.getISBN() + "\n"
+                            + availability + " for Loan"
+                    );
+                    displayBookBtn.setEnabled(true);     // Enable book display button
+                    displayStudentBtn.setEnabled(false); // Disable student display button
+                } else {
+                    searchResultArea.setText("Book not found.");
+                    displayStudentBtn.setEnabled(false);
+                    displayBookBtn.setEnabled(false);
+                }
+            }
+        } catch (Exception e) {
+            // Handle any unexpected errors
+            searchResultArea.setText("An error occurred during search.");
+            displayStudentBtn.setEnabled(false);
+            displayBookBtn.setEnabled(false);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_searchBtnActionPerformed
 
     /**
      * @param args the command line arguments
